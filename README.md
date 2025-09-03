@@ -75,7 +75,7 @@ Sigue estos pasos para obtener una copia del proyecto y ejecutarla en tu máquin
 
 1.  **Clona el repositorio**
     ```sh
-    git clone [https://github.com/tu-usuario/launch_camerax.git](https://github.com/tu-usuario/launch_camerax.git)
+    git clone https://github.com/yemmrojas/launch_camerax.git
     ```
 2.  **Abre el proyecto** en Android Studio.
 3.  **Sincroniza Gradle** y espera a que se descarguen todas las dependencias.
