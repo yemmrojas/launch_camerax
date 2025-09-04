@@ -10,7 +10,8 @@ fun TextFieldCommon(
     value: String,
     onValueChange: (String) -> Unit,
     label: @Composable () -> Unit,
-    modifier: Modifier) {
+    modifier: Modifier
+) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,

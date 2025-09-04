@@ -8,8 +8,8 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.launchcamera.ui.theme.Purple40
 import com.example.launchcamera.ui.theme.Purple80
 
 @Composable
@@ -20,7 +20,7 @@ fun ButtonSecondary(
 ) {
     val buttonColors: ButtonColors = ButtonDefaults.filledTonalButtonColors(
         containerColor = Purple80,
-        contentColor = Color.White
+        contentColor = Purple40
     )
     FilledTonalButton(
         onClick = onClick,

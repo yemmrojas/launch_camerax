@@ -10,67 +10,60 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.launchcamera.screen.util.ButtonPrimary
-import com.example.launchcamera.screen.util.ButtonSecondary
 import com.example.launchcamera.screen.util.TextContent
 import com.example.launchcamera.screen.util.TextFieldCommon
 import com.example.launchcamera.screen.util.TextTitle
 
-private const val LOGIN_TITLE = "Sign In to account"
-private const val LOGIN_DESCRIPTION = "Sign in with your email and password for continue"
+private const val TITLE_REGISTER = "Hi %s !"
+private const val DESCRIPTION_REGISTER = "Enter the data to complete the registration."
 
 @Composable
-fun LoginScreen() {
-    val verticalArrangement: Arrangement.Vertical = Arrangement.Center
+fun RegisterScreen() {
+    val name = "David Martinez"
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = verticalArrangement
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
     ) {
-        TitleScreen(
-            modifier = Modifier
-                .padding(
-                    top = 32.dp,
-                    bottom = 16.dp,
-                    start = 32.dp,
-                    end = 32.dp
-                )
-        )
-        DescriptionScreen(
-            modifier = Modifier
-                .padding(
-                    bottom = 16.dp,
-                    start = 32.dp,
-                    end = 32.dp
-                )
-        )
-        TextInputUsername()
-        TextInputPassword()
-        ButtonLogin()
+        name.TitleRegister()
+        DescriptionRegister()
+        TextFieldEmailRegister()
+        TextConfirmEmailRegister()
+        TextFieldPasswordRegister()
         ButtonRegister()
     }
 }
 
 @Composable
-private fun TitleScreen(modifier: Modifier = Modifier) {
+private fun String.TitleRegister() {
     TextTitle(
-        title = LOGIN_TITLE,
-        modifier = modifier
+        title = TITLE_REGISTER.format(this),
+        modifier = Modifier.padding(
+            top = 32.dp,
+            bottom = 8.dp,
+            start = 32.dp,
+            end = 32.dp
+        )
     )
 }
 
 @Composable
-private fun DescriptionScreen(modifier: Modifier = Modifier) {
+private fun DescriptionRegister() {
     TextContent(
-        content = LOGIN_DESCRIPTION,
-        modifier = modifier
+        content = DESCRIPTION_REGISTER,
+        modifier = Modifier.padding(
+            bottom = 16.dp,
+            start = 32.dp,
+            end = 32.dp
+        )
     )
 }
 
 @Composable
-private fun TextInputUsername() {
+private fun TextFieldEmailRegister() {
     TextFieldCommon(
         value = "",
         onValueChange = {},
-        label = { Text(text = "User name") },
+        label = { Text(text = "Email") },
         modifier = Modifier
             .padding(
                 bottom = 8.dp,
@@ -81,7 +74,22 @@ private fun TextInputUsername() {
 }
 
 @Composable
-private fun TextInputPassword() {
+private fun TextConfirmEmailRegister() {
+    TextFieldCommon(
+        value = "",
+        onValueChange = {},
+        label = { Text(text = "Confirm Email") },
+        modifier = Modifier
+            .padding(
+                bottom = 8.dp,
+                start = 32.dp,
+                end = 32.dp
+            )
+    )
+}
+
+@Composable
+private fun TextFieldPasswordRegister() {
     TextFieldCommon(
         value = "",
         onValueChange = {},
@@ -96,29 +104,15 @@ private fun TextInputPassword() {
 }
 
 @Composable
-private fun ButtonLogin() {
-    ButtonPrimary(
-        text = "Login",
-        onClick = { },
-        modifier = Modifier
-            .padding(
-                bottom = 8.dp,
-                start = 32.dp,
-                end = 32.dp
-            )
-    )
-}
-
-@Composable
 private fun ButtonRegister() {
-    ButtonSecondary(
+    ButtonPrimary(
         text = "Register",
-        onClick = { },
+        onClick = { /*TODO*/ },
         modifier = Modifier
             .padding(
-                bottom = 32.dp,
                 start = 32.dp,
-                end = 32.dp
+                end = 32.dp,
+                bottom = 32.dp
             )
     )
 }
@@ -126,5 +120,5 @@ private fun ButtonRegister() {
 @Preview(showBackground = true)
 @Composable
 private fun GreetingPreview() {
-    LoginScreen()
+    RegisterScreen()
 }
