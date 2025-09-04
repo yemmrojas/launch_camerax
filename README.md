@@ -89,4 +89,4 @@ Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE)
 
 ---
 
-Creado por **Yeimer Rojas** | [linkedin](www.linkedin.com/in/yeimerrojas)
+Creado por **Yeimer Rojas** | [linkedin](https://www.linkedin.com/in/yeimerrojas)
