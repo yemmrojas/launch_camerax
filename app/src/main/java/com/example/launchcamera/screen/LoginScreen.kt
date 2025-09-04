@@ -7,19 +7,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import com.example.launchcamera.screen.util.ButtonPrimary
 import com.example.launchcamera.screen.util.ButtonSecondary
 import com.example.launchcamera.screen.util.TextContent
 import com.example.launchcamera.screen.util.TextFieldCommon
 import com.example.launchcamera.screen.util.TextTitle
+import kotlinx.serialization.Serializable
 
+@Serializable
+data object LoginScreenKey: NavKey
 private const val LOGIN_TITLE = "Sign In to account"
 private const val LOGIN_DESCRIPTION = "Sign in with your email and password for continue"
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    onLoginClicked: () -> Unit,
+    onRegisterClicked: () -> Unit
+) {
     val verticalArrangement: Arrangement.Vertical = Arrangement.Center
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -44,8 +50,8 @@ fun LoginScreen() {
         )
         TextInputUsername()
         TextInputPassword()
-        ButtonLogin()
-        ButtonRegister()
+        ButtonLogin(onLoginClicked)
+        ButtonLoginRegister(onRegisterClicked)
     }
 }
 
@@ -96,10 +102,10 @@ private fun TextInputPassword() {
 }
 
 @Composable
-private fun ButtonLogin() {
+private fun ButtonLogin(onLoginClicked: () -> Unit) {
     ButtonPrimary(
         text = "Login",
-        onClick = { },
+        onClick = { onLoginClicked() },
         modifier = Modifier
             .padding(
                 bottom = 8.dp,
@@ -110,10 +116,10 @@ private fun ButtonLogin() {
 }
 
 @Composable
-private fun ButtonRegister() {
+private fun ButtonLoginRegister(onRegisterClicked: () -> Unit) {
     ButtonSecondary(
         text = "Register",
-        onClick = { },
+        onClick = { onRegisterClicked() },
         modifier = Modifier
             .padding(
                 bottom = 32.dp,
@@ -121,10 +127,4 @@ private fun ButtonRegister() {
                 end = 32.dp
             )
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun GreetingPreview() {
-    LoginScreen()
 }

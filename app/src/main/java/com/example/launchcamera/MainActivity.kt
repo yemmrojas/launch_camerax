@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.launchcamera.screen.LoginScreen
+import com.example.launchcamera.screen.Navigation
 import com.example.launchcamera.ui.theme.LaunchCameraTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             LaunchCameraTheme {
-                LoginScreen()
+                Navigation()
             }
         }
     }

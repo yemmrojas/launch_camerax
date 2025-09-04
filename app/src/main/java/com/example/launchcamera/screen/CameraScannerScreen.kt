@@ -17,13 +17,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import com.example.launchcamera.screen.util.ButtonSecondary
 import com.example.launchcamera.screen.util.TextContent
 import com.example.launchcamera.screen.util.TextTitle
 import com.example.launchcamera.ui.theme.Purple40
 import com.example.launchcamera.ui.theme.Purple80
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object CameraScannerScreenKey : NavKey
 
 private const val TITLE_CAMERA_SCANNER = "Scan of identity document"
 private const val DESCRIPTION_CAMERA_SCANNER = "Prepare your ID document to scan it on both sides."
@@ -31,7 +35,7 @@ private const val BUTTON_CAMERA_SCANNER = "Start Scanning"
 private const val DESCRIPTION_IMAGE_CAMERA_SCANNER = "Image of camera"
 
 @Composable
-fun CameraScannerScreen() {
+fun CameraScannerScreen(onSuccessScanner: (String) -> Unit) {
     val verticalArrangement: Arrangement.Vertical = Arrangement.Center
     Column(
         modifier = Modifier
@@ -42,7 +46,7 @@ fun CameraScannerScreen() {
         ImageCamera()
         TitleCameraScanner()
         DescriptionCameraScanner()
-        ButtonCameraScanner()
+        ButtonCameraScanner(onSuccessScanner)
     }
 }
 
@@ -53,14 +57,14 @@ private fun ImageCamera() {
             .fillMaxWidth()
             .padding(bottom = 8.dp),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         Icon(
             imageVector = Icons.Default.Info,
             contentDescription = DESCRIPTION_IMAGE_CAMERA_SCANNER,
             tint = Purple80,
             modifier = Modifier
-                .width(80.dp)
-                .height(80.dp)
+                .width(60.dp)
+                .height(60.dp)
         )
     }
 }
@@ -98,10 +102,10 @@ private fun DescriptionCameraScanner() {
 }
 
 @Composable
-private fun ButtonCameraScanner() {
+private fun ButtonCameraScanner(onSuccessScanner: (String) -> Unit) {
     ButtonSecondary(
         text = BUTTON_CAMERA_SCANNER,
-        onClick = { /*TODO*/ },
+        onClick = { onSuccessScanner("Success") },
         modifier = Modifier
             .padding(
                 start = 32.dp,
@@ -109,10 +113,4 @@ private fun ButtonCameraScanner() {
                 bottom = 32.dp
             )
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun GreetingPreview() {
-    CameraScannerScreen()
 }

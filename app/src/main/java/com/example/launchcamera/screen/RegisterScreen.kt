@@ -1,5 +1,6 @@
 package com.example.launchcamera.screen
 
+import android.media.AudioProfile
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,16 +10,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 import com.example.launchcamera.screen.util.ButtonPrimary
 import com.example.launchcamera.screen.util.TextContent
 import com.example.launchcamera.screen.util.TextFieldCommon
 import com.example.launchcamera.screen.util.TextTitle
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object RegisterScreenKey : NavKey
 
 private const val TITLE_REGISTER = "Hi %s !"
 private const val DESCRIPTION_REGISTER = "Enter the data to complete the registration."
 
 @Composable
-fun RegisterScreen() {
+fun RegisterScreen(onNavProfile: () -> Unit) {
     val name = "David Martinez"
     Column(
         verticalArrangement = Arrangement.Center,
@@ -29,7 +35,7 @@ fun RegisterScreen() {
         TextFieldEmailRegister()
         TextConfirmEmailRegister()
         TextFieldPasswordRegister()
-        ButtonRegister()
+        ButtonRegister(onNavProfile)
     }
 }
 
@@ -104,10 +110,10 @@ private fun TextFieldPasswordRegister() {
 }
 
 @Composable
-private fun ButtonRegister() {
+private fun ButtonRegister(onNavProfile: () -> Unit) {
     ButtonPrimary(
         text = "Register",
-        onClick = { /*TODO*/ },
+        onClick = { onNavProfile() },
         modifier = Modifier
             .padding(
                 start = 32.dp,
@@ -115,10 +121,4 @@ private fun ButtonRegister() {
                 bottom = 32.dp
             )
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun GreetingPreview() {
-    RegisterScreen()
 }
