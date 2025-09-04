@@ -68,7 +68,7 @@ Sigue estos pasos para obtener una copia del proyecto y ejecutarla en tu máquin
 
 ### Prerrequisitos
 
-* Android Studio Iguana | 2023.2.1 o superior.
+* Android Studio Narwhal 3 Feature Drop | 2025.1.3.
 * JDK 17.
 
 ### Instalación
@@ -89,4 +89,4 @@ Este proyecto está bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE)
 
 ---
 
-Creado por **Yeimer Rojas** | (linkedin)[www.linkedin.com/in/yeimerrojas]
+Creado por **Yeimer Rojas** | [linkedin](www.linkedin.com/in/yeimerrojas)
