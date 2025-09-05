@@ -1,4 +1,4 @@
-package com.example.launchcamera.screen
+package com.example.launchcamera.screen.nav
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -6,8 +6,16 @@ import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.example.launchcamera.screen.viewModel.LoginViewModel
-import com.example.launchcamera.screen.viewModel.RegisterViewModel
+import com.example.launchcamera.screen.profile.ProfileScreen
+import com.example.launchcamera.screen.profile.ProfileScreenKey
+import com.example.launchcamera.screen.camera.CameraScannerScreen
+import com.example.launchcamera.screen.camera.CameraScannerScreenKey
+import com.example.launchcamera.screen.login.LoginScreen
+import com.example.launchcamera.screen.login.LoginScreenKey
+import com.example.launchcamera.screen.login.viewModel.LoginViewModel
+import com.example.launchcamera.screen.register.RegisterScreen
+import com.example.launchcamera.screen.register.RegisterScreenKey
+import com.example.launchcamera.screen.register.viewModel.RegisterViewModel
 
 @Composable
 fun Navigation() {

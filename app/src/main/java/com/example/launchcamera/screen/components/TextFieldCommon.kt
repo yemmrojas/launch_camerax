@@ -1,4 +1,4 @@
-package com.example.launchcamera.screen.util
+package com.example.launchcamera.screen.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions

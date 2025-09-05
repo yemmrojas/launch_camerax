@@ -1,4 +1,4 @@
-package com.example.launchcamera.screen
+package com.example.launchcamera.screen.camera
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,9 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import com.example.launchcamera.screen.util.ButtonSecondary
-import com.example.launchcamera.screen.util.TextContent
-import com.example.launchcamera.screen.util.TextTitle
+import com.example.launchcamera.screen.components.ButtonSecondary
+import com.example.launchcamera.screen.components.TextContent
+import com.example.launchcamera.screen.components.TextTitle
 import com.example.launchcamera.ui.theme.Purple40
 import com.example.launchcamera.ui.theme.Purple80
 import kotlinx.serialization.Serializable
