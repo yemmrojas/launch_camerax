@@ -13,6 +13,7 @@ kotlinSerialization = "1.7.3"
 daggerHiltVersion = "2.56.2"
 kspVersion = "2.2.10-2.0.2"
 hiltViewModel = "1.2.0"
+cameraxVersion = "1.4.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -29,12 +30,20 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+## Navigation3
 androidx-navigation3-runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "navigation3Version" }
 androidx-navigation3-ui = { group = "androidx.navigation3", name = "navigation3-ui", version.ref = "navigation3Version" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinSerialization" }
+## Dagger - Hilt
 dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "daggerHiltVersion" }
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "daggerHiltVersion" }
 hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltViewModel" }
+## CameraX
+camerax-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraxVersion" }
+camerax-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraxVersion" }
+camerax-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraxVersion" }
+camerax-extensions = { group = "androidx.camera", name = "camera-extensions", version.ref = "cameraxVersion" }
+camerax-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraxVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

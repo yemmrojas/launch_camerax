@@ -6,13 +6,14 @@ import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.example.launchcamera.screen.profile.ProfileScreen
-import com.example.launchcamera.screen.profile.ProfileScreenKey
 import com.example.launchcamera.screen.camera.CameraScannerScreen
 import com.example.launchcamera.screen.camera.CameraScannerScreenKey
+import com.example.launchcamera.screen.camera.viewModel.CameraScannerViewModel
 import com.example.launchcamera.screen.login.LoginScreen
 import com.example.launchcamera.screen.login.LoginScreenKey
 import com.example.launchcamera.screen.login.viewModel.LoginViewModel
+import com.example.launchcamera.screen.profile.ProfileScreen
+import com.example.launchcamera.screen.profile.ProfileScreenKey
 import com.example.launchcamera.screen.register.RegisterScreen
 import com.example.launchcamera.screen.register.RegisterScreenKey
 import com.example.launchcamera.screen.register.viewModel.RegisterViewModel
@@ -37,7 +38,8 @@ fun Navigation() {
                 )
             }
             entry<CameraScannerScreenKey> {
-                CameraScannerScreen {
+                val cameraScannerViewModel: CameraScannerViewModel = hiltViewModel()
+                CameraScannerScreen(cameraScannerViewModel) {
                     backStack.add(RegisterScreenKey)
                 }
             }
