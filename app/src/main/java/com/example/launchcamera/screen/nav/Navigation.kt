@@ -2,62 +2,68 @@ package com.example.launchcamera.screen.nav
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation3.runtime.entry
-import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.runtime.rememberNavBackStack
-import androidx.navigation3.ui.NavDisplay
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.launchcamera.screen.camera.CAMERA_SCANNER_ROUTE
 import com.example.launchcamera.screen.camera.CameraScannerScreen
-import com.example.launchcamera.screen.camera.CameraScannerScreenKey
 import com.example.launchcamera.screen.camera.viewModel.CameraScannerViewModel
+import com.example.launchcamera.screen.login.LOGIN_ROUTE
 import com.example.launchcamera.screen.login.LoginScreen
-import com.example.launchcamera.screen.login.LoginScreenKey
 import com.example.launchcamera.screen.login.viewModel.LoginViewModel
+import com.example.launchcamera.screen.profile.PROFILE_ROUTE
 import com.example.launchcamera.screen.profile.ProfileScreen
-import com.example.launchcamera.screen.profile.ProfileScreenKey
+import com.example.launchcamera.screen.register.REGISTER_ROUTE
 import com.example.launchcamera.screen.register.RegisterScreen
-import com.example.launchcamera.screen.register.RegisterScreenKey
 import com.example.launchcamera.screen.register.viewModel.RegisterViewModel
 
 @Composable
 fun Navigation() {
-    val backStack = rememberNavBackStack(LoginScreenKey)
-    NavDisplay(
-        backStack = backStack,
-        entryProvider = entryProvider {
-            entry<LoginScreenKey> {
-                val loginViewModel: LoginViewModel = hiltViewModel()
-                LoginScreen(
-                    viewModel = loginViewModel,
-                    onLoginClicked = {
-                        backStack.clear()
-                        backStack.add(ProfileScreenKey)
-                    },
-                    onRegisterClicked = {
-                        backStack.add(CameraScannerScreenKey)
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = LOGIN_ROUTE) {
+        composable(route = LOGIN_ROUTE) {
+            val loginViewModel: LoginViewModel = hiltViewModel()
+            LoginScreen(
+                viewModel = loginViewModel,
+                onLoginClicked = {
+                    navController.navigate(PROFILE_ROUTE) {
+                        popUpTo(0)
                     }
-                )
-            }
-            entry<CameraScannerScreenKey> {
-                val cameraScannerViewModel: CameraScannerViewModel = hiltViewModel()
-                CameraScannerScreen(cameraScannerViewModel) {
-                    backStack.add(RegisterScreenKey)
+                },
+                onRegisterClicked = {
+                    navController.navigate(CAMERA_SCANNER_ROUTE)
                 }
-            }
-            entry<RegisterScreenKey> {
-                val registerViewModel: RegisterViewModel = hiltViewModel()
-                RegisterScreen(
-                    viewModel = registerViewModel
-                ) {
-                    backStack.clear()
-                    backStack.add(LoginScreenKey)
-                }
-            }
-            entry<ProfileScreenKey> {
-                ProfileScreen() {
-                    backStack.clear()
-                    backStack.add(LoginScreenKey)
-                }
-            }
+            )
         }
-    )
+
+        composable(route = CAMERA_SCANNER_ROUTE) {
+            val cameraScannerViewModel: CameraScannerViewModel = hiltViewModel()
+            CameraScannerScreen(
+                viewModel = cameraScannerViewModel,
+                onSuccessScanner = {
+                    navController.navigate(REGISTER_ROUTE)
+                }
+            )
+        }
+
+        composable(route = REGISTER_ROUTE) {
+            val registerViewModel: RegisterViewModel = hiltViewModel()
+            RegisterScreen(
+                viewModel = registerViewModel,
+                onNavProfile = {
+                    navController.navigate(LOGIN_ROUTE)
+                }
+            )
+        }
+
+        composable(route = PROFILE_ROUTE) {
+            ProfileScreen(
+                onLogoutClicked = {
+                    navController.navigate(LOGIN_ROUTE) {
+                        popUpTo(0)
+                    }
+                }
+            )
+        }
+    }
 }

@@ -11,17 +11,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavKey
 import com.example.launchcamera.screen.components.ButtonPrimary
 import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextFieldCommon
 import com.example.launchcamera.screen.components.TextTitle
 import com.example.launchcamera.screen.register.viewModel.RegisterViewModel
-import kotlinx.serialization.Serializable
 
-@Serializable
-data object RegisterScreenKey : NavKey
-
+internal const val REGISTER_ROUTE = "register"
 private const val TITLE_REGISTER = "Hi %s !"
 private const val DESCRIPTION_REGISTER = "Enter the data to complete the registration."
 

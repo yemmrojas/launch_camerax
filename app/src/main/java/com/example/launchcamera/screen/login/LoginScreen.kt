@@ -19,7 +19,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavKey
 import com.example.launchcamera.screen.components.ButtonPrimary
 import com.example.launchcamera.screen.components.ButtonSecondary
 import com.example.launchcamera.screen.components.TextContent
@@ -27,11 +26,8 @@ import com.example.launchcamera.screen.components.TextFieldCommon
 import com.example.launchcamera.screen.components.TextTitle
 import com.example.launchcamera.screen.login.viewModel.LoginViewModel
 import com.example.launchcamera.ui.theme.Purple40
-import kotlinx.serialization.Serializable
 
-@Serializable
-data object LoginScreenKey : NavKey
-
+internal const val LOGIN_ROUTE = "login"
 private const val LOGIN_TITLE = "Sign In to account"
 private const val LOGIN_DESCRIPTION =
     "Enter your ID and select whether you want us to save your session"

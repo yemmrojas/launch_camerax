@@ -3,6 +3,7 @@ package com.example.launchcamera.screen.profile
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,17 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavKey
+import com.example.launchcamera.screen.components.ButtonPrimary
 import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextTitle
 import com.example.launchcamera.ui.theme.Purple40
 import com.example.launchcamera.ui.theme.Purple80
-import kotlinx.serialization.Serializable
-import androidx.compose.foundation.layout.Row
-import com.example.launchcamera.screen.components.ButtonPrimary
 
-@Serializable
-data object ProfileScreenKey : NavKey
+internal const val PROFILE_ROUTE = "profile"
 
 @Composable
 fun ProfileScreen(

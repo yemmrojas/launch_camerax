@@ -19,17 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavKey
 import com.example.launchcamera.screen.camera.viewModel.CameraScannerViewModel
 import com.example.launchcamera.screen.components.ButtonSecondary
 import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextTitle
 import com.example.launchcamera.ui.theme.Purple40
 import com.example.launchcamera.ui.theme.Purple80
-import kotlinx.serialization.Serializable
 
-@Serializable
-data object CameraScannerScreenKey : NavKey
+internal const val CAMERA_SCANNER_ROUTE = "camera"
 
 private const val TITLE_CAMERA_SCANNER = "Scan of identity document"
 private const val DESCRIPTION_CAMERA_SCANNER = "Prepare your ID document to scan it on both sides."
