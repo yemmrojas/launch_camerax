@@ -56,6 +56,9 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     // Hilt
     implementation(libs.dagger.hilt.android)
+    implementation(libs.vision.common)
+    implementation(libs.play.services.mlkit.text.recognition.common)
+    implementation(libs.play.services.mlkit.text.recognition)
     ksp(libs.dagger.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
@@ -65,6 +68,8 @@ dependencies {
     implementation(libs.camerax.view)
     implementation(libs.camerax.core)
     implementation(libs.accompanist.permissions)
+    // Ml kit
+    implementation(libs.mlkit.text.recognition)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

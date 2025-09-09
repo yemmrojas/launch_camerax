@@ -87,14 +87,12 @@ fun CameraPreview(
                 )
                 implementationMode = PreviewView.ImplementationMode.COMPATIBLE
             }
-
-            // Inicia el proceso de vinculación
             bindCameraUseCases(
                 cameraProviderFuture = cameraProviderFuture,
                 previewView = previewView,
                 lifecycleOwner = lifecycleOwner,
                 context = context,
-                imageCapture = imageCapture // También le pasamos ImageCapture aquí
+                imageCapture = imageCapture
             )
 
             previewView
@@ -148,7 +146,7 @@ private fun takePhotoInternal(
         executor,
         object : ImageCapture.OnImageCapturedCallback() {
             override fun onCaptureSuccess(image: ImageProxy) {
-                Log.d("TakePhoto", "Photo capture succeeded")
+                Log.d("TakePhoto", "Photo capture succeeded ${image.format}")
                 onPhotoCaptured(image)
             }
 

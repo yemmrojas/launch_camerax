@@ -2,6 +2,7 @@ package com.example.launchcamera.screen.camera.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.launchcamera.domain.usescases.ExtractTextFromImageUseCase
 import com.example.launchcamera.screen.camera.CameraPermissionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +12,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CameraScannerViewModel @Inject constructor(): ViewModel() {
+class CameraScannerViewModel @Inject constructor(
+    private val extractTextFromImageUseCase: ExtractTextFromImageUseCase
+): ViewModel() {
 
     private val _cameraPermissionState = MutableStateFlow(CameraPermissionState.UNINITIALIZED)
     val cameraPermissionState = _cameraPermissionState.asStateFlow()
