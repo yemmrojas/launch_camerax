@@ -119,5 +119,4 @@ class CameraScannerViewModel @Inject constructor(
             messageErrorScan = errorMessage
         )
     }
-
 }

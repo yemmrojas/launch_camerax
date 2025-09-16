@@ -17,18 +17,21 @@ import com.example.launchcamera.screen.components.TextFieldCommon
 import com.example.launchcamera.screen.components.TextTitle
 import com.example.launchcamera.screen.register.viewModel.RegisterViewModel
 
+internal const val USER_ID_ARGUMENT = "userId"
 internal const val REGISTER_ROUTE = "register"
 private const val TITLE_REGISTER = "Hi %s !"
 private const val DESCRIPTION_REGISTER = "Enter the data to complete the registration."
 
 @Composable
-fun RegisterScreen(viewModel: RegisterViewModel, onNavProfile: () -> Unit) {
-    val name = "David Martinez"
+fun RegisterScreen(
+    viewModel: RegisterViewModel,
+    onNavProfile: () -> Unit
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        name.TitleRegister()
+        viewModel.userId?.TitleRegister()
         DescriptionRegister()
         TextFieldEmailRegister(viewModel)
         TextConfirmEmailRegister(viewModel)

@@ -1,6 +1,8 @@
 package com.example.launchcamera.screen.register.viewModel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.example.launchcamera.screen.register.USER_ID_ARGUMENT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,7 +11,11 @@ import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(): ViewModel() {
+class RegisterViewModel @Inject constructor(
+     savedStateHandle: SavedStateHandle
+): ViewModel() {
+
+    val userId = savedStateHandle.get<String>(USER_ID_ARGUMENT)
 
     private val _email = MutableStateFlow(EMPTY_STRING)
     val email = _email.asStateFlow()
