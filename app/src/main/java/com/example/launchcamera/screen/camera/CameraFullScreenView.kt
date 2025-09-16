@@ -26,11 +26,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.launchcamera.screen.camera.viewModel.CameraScannerViewModel
 import com.google.common.util.concurrent.ListenableFuture
 import java.util.concurrent.Executor
 
 @Composable
 fun CameraFullScreenView(
+    viewModel: CameraScannerViewModel
 ) {
     val context = LocalContext.current
     val imageCapture = remember { ImageCapture.Builder().build() }
@@ -44,7 +47,7 @@ fun CameraFullScreenView(
                     takePhotoInternal(
                         context = context,
                         onPhotoCaptured = { imageProxy ->
-                            Log.d("CameraFullScreenView", "Photo captured: $imageProxy")
+                            viewModel.processImage(imageProxy)
                             imageProxy.close()
                         },
                         onCaptureError = { exception ->
