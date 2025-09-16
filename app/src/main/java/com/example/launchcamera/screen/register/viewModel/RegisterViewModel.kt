@@ -12,8 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-     savedStateHandle: SavedStateHandle
-): ViewModel() {
+    savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     val userId = savedStateHandle.get<String>(USER_ID_ARGUMENT)
 

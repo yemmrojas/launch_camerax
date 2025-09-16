@@ -13,7 +13,6 @@ import com.example.launchcamera.screen.camera.state.IconConfig
 import com.example.launchcamera.screen.camera.state.ScanState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -100,10 +99,6 @@ class CameraScannerViewModel @Inject constructor(
         _cameraScannerState.value = _cameraScannerState.value.copy(userData = userData)
     }
 
-    private fun updateScanState(scanState: ScanState) {
-        _cameraScannerState.value = _cameraScannerState.value.copy(scanState = scanState)
-    }
-
     private fun updateScanStateBasedOnUserData(userData: UserData) {
         val newScanState = if (userDataValidator.isUserDataComplete(userData)) {
             ScanState.FINISH
@@ -111,6 +106,10 @@ class CameraScannerViewModel @Inject constructor(
             ScanState.BACK_SIDE
         }
         updateScanState(newScanState)
+    }
+
+    private fun updateScanState(scanState: ScanState) {
+        _cameraScannerState.value = _cameraScannerState.value.copy(scanState = scanState)
     }
 
     private fun handleScanError(errorMessage: String) {

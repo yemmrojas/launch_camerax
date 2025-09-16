@@ -26,7 +26,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.launchcamera.screen.camera.viewModel.CameraScannerViewModel
 import com.google.common.util.concurrent.ListenableFuture
 import java.util.concurrent.Executor
@@ -51,7 +50,11 @@ fun CameraFullScreenView(
                             imageProxy.close()
                         },
                         onCaptureError = { exception ->
-                            Log.e("CameraFullScreenView", "Photo capture failed: ${exception.message}", exception)
+                            Log.e(
+                                "CameraFullScreenView",
+                                "Photo capture failed: ${exception.message}",
+                                exception
+                            )
                         },
                         imageCapture = imageCapture
                     )
