@@ -5,8 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.launchcamera.domain.model.UserData
 import com.example.launchcamera.domain.usescases.ExtractTextFromImageUseCase
-import com.example.launchcamera.screen.camera.CameraPermissionState
-import com.example.launchcamera.screen.camera.ScanState
+import com.example.launchcamera.screen.camera.provider.CameraScannerContentProvider
+import com.example.launchcamera.screen.camera.provider.UserDataValidator
+import com.example.launchcamera.screen.camera.state.CameraPermissionState
+import com.example.launchcamera.screen.camera.state.CameraScannerState
+import com.example.launchcamera.screen.camera.state.IconConfig
+import com.example.launchcamera.screen.camera.state.ScanState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,81 +20,104 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CameraScannerViewModel @Inject constructor(
-    private val extractTextFromImageUseCase: ExtractTextFromImageUseCase
+    private val extractTextFromImageUseCase: ExtractTextFromImageUseCase,
+    private val userDataValidator: UserDataValidator,
+    private val cameraScannerContentProvider: CameraScannerContentProvider,
 ) : ViewModel() {
 
-    private val _cameraPermissionState = MutableStateFlow(CameraPermissionState.UNINITIALIZED)
-    val cameraPermissionState = _cameraPermissionState.asStateFlow()
-
-    private val _shouldRequestPermission = MutableStateFlow(false)
-    val shouldRequestPermission = _shouldRequestPermission.asStateFlow()
-
-    private val _userData = MutableStateFlow(UserData())
-    val userData = _userData.asStateFlow()
-
-    private val _scanState = MutableStateFlow(ScanState.INIT)
-    val scanState = _scanState.asStateFlow()
-
-    private val _messageErrorScan = MutableStateFlow("")
-    val messageErrorScan = _messageErrorScan.asStateFlow()
-
-    private val _showCamera = MutableStateFlow(true)
-    val showCamera = _showCamera.asStateFlow()
-
+    private val _cameraScannerState = MutableStateFlow(CameraScannerState())
+    val cameraScannerState = _cameraScannerState.asStateFlow()
 
     fun onCameraPermissionResult(isGranted: Boolean) {
         viewModelScope.launch {
-            if (isGranted) {
-                _cameraPermissionState.value = CameraPermissionState.GRANTED
-            } else {
-                _cameraPermissionState.value = CameraPermissionState.DENIED
-            }
-            _shouldRequestPermission.value = false
+            _cameraScannerState.value = _cameraScannerState.value.copy(
+                cameraPermissionState = if (isGranted) {
+                    CameraPermissionState.GRANTED
+                } else {
+                    CameraPermissionState.DENIED
+                },
+                shouldRequestPermission = false
+            )
         }
     }
 
     fun onMainButtonPressed() {
-        if (_cameraPermissionState.value != CameraPermissionState.GRANTED) {
+        if (_cameraScannerState.value.cameraPermissionState != CameraPermissionState.GRANTED) {
             requestCameraPermission()
             return
         }
 
-        when (scanState.value) {
+        when (_cameraScannerState.value.scanState) {
             ScanState.INIT, ScanState.BACK_SIDE, ScanState.FRONT_SIDE -> {
-                _showCamera.value = true
+                _cameraScannerState.value = _cameraScannerState.value.copy(showCamera = true)
             }
-            ScanState.FINISH -> {
-                _showCamera.value = false
-            }
-            else -> _scanState.value = ScanState.INIT
-        }
-    }
 
-    private fun requestCameraPermission() {
-        _shouldRequestPermission.value = true
+            ScanState.FINISH -> {
+                _cameraScannerState.value = _cameraScannerState.value.copy(showCamera = false)
+            }
+
+            else -> _cameraScannerState.value = _cameraScannerState.value.copy(showCamera = true)
+        }
     }
 
     fun processImage(imageProxy: ImageProxy) {
-        _showCamera.value = false
+        _cameraScannerState.value = _cameraScannerState.value.copy(showCamera = false)
+        val currentUserData = _cameraScannerState.value.userData
         viewModelScope.launch {
-            val result = extractTextFromImageUseCase(imageProxy, _userData.value)
-            if (result.isSuccess) {
-                result.map { newData ->
-                    _userData.value = newData
-                }
-                if (_userData.value.id.isNotEmpty()
-                    && _userData.value.name.isNotEmpty()
-                    && _userData.value.lastName.isNotEmpty()
-                    && _userData.value.city.isNotEmpty()
-                    && _userData.value.birthDate.isNotEmpty()) {
-                    _scanState.value = ScanState.FINISH
-                } else {
-                    _scanState.value = ScanState.BACK_SIDE
-                }
-            } else {
-                _scanState.value = ScanState.ERROR
-                _messageErrorScan.value = result.exceptionOrNull()?.message.orEmpty()
-            }
+            val result = extractTextFromImageUseCase(imageProxy, currentUserData)
+            handleScanResult(result)
         }
     }
+
+    fun getTitle(scanState: ScanState): String =
+        cameraScannerContentProvider.getTitle(scanState)
+
+    fun getDescription(scanState: ScanState, errorMessage: String): String =
+        cameraScannerContentProvider.getDescription(scanState, errorMessage)
+
+    fun getButtonText(scanState: ScanState): String =
+        cameraScannerContentProvider.getButtonText(scanState)
+
+    fun getIconConfig(scanState: ScanState): IconConfig =
+        cameraScannerContentProvider.getIconConfig(scanState)
+
+    private fun requestCameraPermission() {
+        _cameraScannerState.value = _cameraScannerState.value.copy(shouldRequestPermission = true)
+    }
+
+    private fun handleScanResult(result: Result<UserData>) {
+        if (result.isSuccess) {
+            result.getOrNull()?.let { newUserData ->
+                updateUserData(newUserData)
+                updateScanStateBasedOnUserData(newUserData)
+            }
+        } else {
+            handleScanError(result.exceptionOrNull()?.message.orEmpty())
+        }
+    }
+
+    private fun updateUserData(userData: UserData) {
+        _cameraScannerState.value = _cameraScannerState.value.copy(userData = userData)
+    }
+
+    private fun updateScanState(scanState: ScanState) {
+        _cameraScannerState.value = _cameraScannerState.value.copy(scanState = scanState)
+    }
+
+    private fun updateScanStateBasedOnUserData(userData: UserData) {
+        val newScanState = if (userDataValidator.isUserDataComplete(userData)) {
+            ScanState.FINISH
+        } else {
+            ScanState.BACK_SIDE
+        }
+        updateScanState(newScanState)
+    }
+
+    private fun handleScanError(errorMessage: String) {
+        _cameraScannerState.value = _cameraScannerState.value.copy(
+            scanState = ScanState.ERROR,
+            messageErrorScan = errorMessage
+        )
+    }
+
 }

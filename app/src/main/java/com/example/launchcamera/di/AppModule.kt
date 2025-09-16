@@ -6,6 +6,10 @@ import com.example.launchcamera.data.parser.MLKitTextParserImpl
 import com.example.launchcamera.domain.parser.MLKitTextParser
 import com.example.launchcamera.repository.OcrRepository
 import com.example.launchcamera.repository.OcrRepositoryImpl
+import com.example.launchcamera.screen.camera.provider.CameraScannerContentProvider
+import com.example.launchcamera.screen.camera.provider.UserDataValidator
+import com.example.launchcamera.screen.camera.provider.impl.CameraScannerContentProviderImpl
+import com.example.launchcamera.screen.camera.provider.impl.UserDataValidatorImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -34,4 +38,17 @@ abstract class AppModule {
     abstract fun bindOcrRepository(
         ocrRepositoryImpl: OcrRepositoryImpl
     ): OcrRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserDataValidator(
+        userDataValidatorImpl: UserDataValidatorImpl
+    ): UserDataValidator
+
+    @Binds
+    @Singleton
+    abstract fun bndCameraScannerContainerProvider(
+        cameraScannerContentProviderImpl: CameraScannerContentProviderImpl
+    ): CameraScannerContentProvider
+
 }

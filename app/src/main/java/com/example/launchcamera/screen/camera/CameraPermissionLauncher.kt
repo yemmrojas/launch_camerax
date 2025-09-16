@@ -16,7 +16,7 @@ import com.example.launchcamera.screen.camera.viewModel.CameraScannerViewModel
 fun CameraPermissionLauncher(
     viewModel: CameraScannerViewModel,
 ) {
-    val shouldRequestPermission = viewModel.shouldRequestPermission.collectAsState()
+    val shouldRequestPermission = viewModel.cameraScannerState.collectAsState().value.shouldRequestPermission
 
     val permissionsToRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         arrayOf(
@@ -42,8 +42,8 @@ fun CameraPermissionLauncher(
         }
     }
 
-    LaunchedEffect(shouldRequestPermission.value) {
-        if (shouldRequestPermission.value) {
+    LaunchedEffect(shouldRequestPermission) {
+        if (shouldRequestPermission) {
             permissionLauncher.launch(permissionsToRequest)
         }
     }
