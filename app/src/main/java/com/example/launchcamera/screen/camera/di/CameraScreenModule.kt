@@ -1,11 +1,5 @@
-package com.example.launchcamera.di
+package com.example.launchcamera.screen.camera.di
 
-import com.example.launchcamera.data.datasource.OcrDatasource
-import com.example.launchcamera.data.impl.MlKitOcrDatasource
-import com.example.launchcamera.data.parser.MLKitTextParserImpl
-import com.example.launchcamera.domain.parser.MLKitTextParser
-import com.example.launchcamera.repository.OcrRepository
-import com.example.launchcamera.repository.OcrRepositoryImpl
 import com.example.launchcamera.screen.camera.provider.CameraScannerContentProvider
 import com.example.launchcamera.screen.camera.provider.UserDataValidator
 import com.example.launchcamera.screen.camera.provider.impl.CameraScannerContentProviderImpl
@@ -19,26 +13,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class AppModule {
-
-    @Binds
-    @Singleton
-    abstract fun bindOcrDatasource(
-        mlKitOcrDatasource: MlKitOcrDatasource
-    ) : OcrDatasource
-
-    @Binds
-    @Singleton
-    abstract fun bindMlKitParser(
-        mlKitTextParser: MLKitTextParserImpl
-    ): MLKitTextParser
-
-    @Binds
-    @Singleton
-    abstract fun bindOcrRepository(
-        ocrRepositoryImpl: OcrRepositoryImpl
-    ): OcrRepository
-
+abstract class CameraScreenModule {
     @Binds
     @Singleton
     abstract fun bindUserDataValidator(
