@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.launchcamera.screen.Navigation
+import com.example.launchcamera.screen.nav.Navigation
 import com.example.launchcamera.ui.theme.LaunchCameraTheme
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -1,4 +1,4 @@
-package com.example.launchcamera.screen
+package com.example.launchcamera.screen.register
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,28 +11,27 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavKey
-import com.example.launchcamera.screen.util.ButtonPrimary
-import com.example.launchcamera.screen.util.TextContent
-import com.example.launchcamera.screen.util.TextFieldCommon
-import com.example.launchcamera.screen.util.TextTitle
-import com.example.launchcamera.screen.viewModel.RegisterViewModel
-import kotlinx.serialization.Serializable
+import com.example.launchcamera.screen.components.ButtonPrimary
+import com.example.launchcamera.screen.components.TextContent
+import com.example.launchcamera.screen.components.TextFieldCommon
+import com.example.launchcamera.screen.components.TextTitle
+import com.example.launchcamera.screen.register.viewModel.RegisterViewModel
 
-@Serializable
-data object RegisterScreenKey : NavKey
-
+internal const val USER_ID_ARGUMENT = "userId"
+internal const val REGISTER_ROUTE = "register"
 private const val TITLE_REGISTER = "Hi %s !"
 private const val DESCRIPTION_REGISTER = "Enter the data to complete the registration."
 
 @Composable
-fun RegisterScreen(viewModel: RegisterViewModel, onNavProfile: () -> Unit) {
-    val name = "David Martinez"
+fun RegisterScreen(
+    viewModel: RegisterViewModel,
+    onNavProfile: () -> Unit
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        name.TitleRegister()
+        viewModel.userId?.TitleRegister()
         DescriptionRegister()
         TextFieldEmailRegister(viewModel)
         TextConfirmEmailRegister(viewModel)

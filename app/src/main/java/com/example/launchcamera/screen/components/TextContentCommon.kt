@@ -1,4 +1,4 @@
-package com.example.launchcamera.screen.util
+package com.example.launchcamera.screen.components
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
