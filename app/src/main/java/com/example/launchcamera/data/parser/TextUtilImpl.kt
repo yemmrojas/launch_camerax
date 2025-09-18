@@ -4,6 +4,7 @@ import com.example.launchcamera.data.parser.IdentityCardExtractor.Companion.REGE
 import com.example.launchcamera.data.parser.IdentityCardExtractor.Companion.REGEX_KEY_CITY
 import com.example.launchcamera.data.parser.IdentityCardExtractor.Companion.REGEX_KEY_LASTNAME_OR_NAME
 import com.example.launchcamera.domain.parser.TextUtils
+import com.google.mlkit.vision.text.Text
 import javax.inject.Inject
 import kotlin.math.max
 import kotlin.math.min

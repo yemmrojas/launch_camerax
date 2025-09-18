@@ -11,7 +11,7 @@ import javax.inject.Inject
 class IdentityCardExtractor @Inject constructor(
     private val textUtils: TextUtils,
     private val validator: ExtractedDataValidator
-) : DocumentFieldExtractor {
+): DocumentFieldExtractor {
 
     private val regexNameOrLastName = Regex(REGEX_KEY_LASTNAME_OR_NAME, RegexOption.IGNORE_CASE)
 

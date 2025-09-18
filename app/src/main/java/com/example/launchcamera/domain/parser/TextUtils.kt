@@ -7,4 +7,5 @@ interface TextUtils {
     fun normalizeText(text: String): String
     fun cleanNameText(text: String): String
     fun extractIdFromText(text: String, regex: String): String?
+    fun parseCityAndBirthDate(text: String): Pair<String?, String?>
 }
