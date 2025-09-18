@@ -48,7 +48,7 @@ class TextUtilImpl @Inject constructor() : TextUtils {
         val endIndex = min(list.size - 1, currentLine + 2)
         val value = list[currentLine]
 
-        if (startIndex > endIndex) return ""
+        if (startIndex > endIndex) return EMPTY
 
         for (i in startIndex..endIndex) {
             val potentialValue = list[i]
