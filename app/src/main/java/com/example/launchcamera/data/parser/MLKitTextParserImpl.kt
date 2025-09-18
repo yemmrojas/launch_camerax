@@ -13,6 +13,8 @@ class MLKitTextParserImpl @Inject constructor(
 ): MLKitTextParser {
     override fun parse(recognizedText: Text, data: UserData): UserData {
         val extractor = documentFieldExtractor.extractAllFields(recognizedText)
-        return userDataUpdater.applyUpdates(data, extractor)
+        val userData = userDataUpdater.applyUpdates(data, extractor)
+        println("user data value: $userData")
+        return userData
     }
 }

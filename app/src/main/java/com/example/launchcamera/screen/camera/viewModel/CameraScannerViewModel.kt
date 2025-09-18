@@ -26,6 +26,7 @@ class CameraScannerViewModel @Inject constructor(
 
     private val _cameraScannerState = MutableStateFlow(CameraScannerState())
     val cameraScannerState = _cameraScannerState.asStateFlow()
+    var isProgress = false
 
     fun onCameraPermissionResult(isGranted: Boolean) {
         viewModelScope.launch {
@@ -90,8 +91,10 @@ class CameraScannerViewModel @Inject constructor(
                 updateUserData(newUserData)
                 updateScanStateBasedOnUserData(newUserData)
             }
+            isProgress = false
         } else {
             handleScanError(result.exceptionOrNull()?.message.orEmpty())
+            isProgress = false
         }
     }
 

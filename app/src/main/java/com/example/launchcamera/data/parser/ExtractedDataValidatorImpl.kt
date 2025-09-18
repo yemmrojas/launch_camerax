@@ -9,7 +9,10 @@ class ExtractedDataValidatorImpl @Inject constructor() : ExtractedDataValidator 
         name.isNotBlank() && name.length >= 2 && name.all { it.isLetter() || it.isWhitespace() }
 
     override fun isValidId(id: String): Boolean =
-        id.isNotBlank() && id.replace(".", "").replace(" ", "").all { it.isDigit() }
+        id.isNotBlank() && id.length > 3 &&
+                id.replace(".", "")
+                    .replace(" ", "")
+                    .all { it.isDigit() }
 
     override fun isValidBirthDate(birthDate: String): Boolean =
         birthDate.isNotBlank() && birthDate.length >= 8
