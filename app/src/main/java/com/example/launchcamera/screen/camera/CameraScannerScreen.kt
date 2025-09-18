@@ -1,5 +1,6 @@
 package com.example.launchcamera.screen.camera
 
+import android.widget.ProgressBar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -8,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,6 +28,7 @@ import com.example.launchcamera.screen.components.ButtonSecondary
 import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextTitle
 import com.example.launchcamera.ui.theme.Purple40
+import com.example.launchcamera.ui.theme.Purple80
 
 internal const val CAMERA_SCANNER_ROUTE = "camera"
 private const val DESCRIPTION_IMAGE_CAMERA_SCANNER = "Image of camera"
@@ -73,12 +77,31 @@ private fun CameraScannerWelcomeScreen(
             .background(Purple40),
         verticalArrangement = verticalArrangement
     ) {
-        ImageCamera(iconConfig)
-        TitleCameraScanner(title)
-        DescriptionCameraScanner(description)
-        ButtonCameraScanner(
-            viewModel,
-            onSuccessScanner
+        if (viewModel.isProgress) {
+            ProgressBarView()
+        } else {
+            ImageCamera(iconConfig)
+            TitleCameraScanner(title)
+            DescriptionCameraScanner(description)
+            ButtonCameraScanner(
+                viewModel,
+                onSuccessScanner
+            )
+        }
+    }
+}
+
+@Composable
+fun ProgressBarView() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(50.dp),
+            color = Purple80,
+            strokeWidth = 5.dp
         )
     }
 }

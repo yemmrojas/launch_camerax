@@ -46,8 +46,8 @@ fun CameraFullScreenView(
                     takePhotoInternal(
                         context = context,
                         onPhotoCaptured = { imageProxy ->
+                            viewModel.isProgress = true
                             viewModel.processImage(imageProxy)
-                            imageProxy.close()
                         },
                         onCaptureError = { exception ->
                             Log.e(
