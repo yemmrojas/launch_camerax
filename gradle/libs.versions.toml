@@ -18,6 +18,7 @@ mlkit = "16.0.1"
 visionCommon = "17.3.0"
 playServicesMlkitTextRecognitionCommon = "19.1.0"
 playServicesMlkitTextRecognition = "19.0.1"
+room_version = "2.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,12 +46,16 @@ camerax-camera2 = { group = "androidx.camera", name = "camera-camera2", version.
 camerax-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraxVersion" }
 camerax-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraxVersion" }
 camerax-core = { group = "androidx.camera", name = "camera-core", version.ref = "cameraxVersion" }
-accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions" , version.ref = "accompanist" }
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 ## ML Kit
-mlkit-text-recognition = { module = "com.google.mlkit:text-recognition" , version.ref = "mlkit" }
+mlkit-text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "mlkit" }
 vision-common = { group = "com.google.mlkit", name = "vision-common", version.ref = "visionCommon" }
 play-services-mlkit-text-recognition-common = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition-common", version.ref = "playServicesMlkitTextRecognitionCommon" }
 play-services-mlkit-text-recognition = { group = "com.google.android.gms", name = "play-services-mlkit-text-recognition", version.ref = "playServicesMlkitTextRecognition" }
+## Room
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room_version" }
+androidx-room-kps = { group = "androidx.room", name = "room-compiler", version.ref = "room_version" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room_version" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

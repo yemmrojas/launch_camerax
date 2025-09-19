@@ -2,20 +2,32 @@ package com.example.launchcamera.screen.register.viewModel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.launchcamera.domain.model.UserData
+import com.example.launchcamera.domain.usescases.GetUserByIdUseCase
+import com.example.launchcamera.domain.usescases.UpdateUserUseCase
 import com.example.launchcamera.screen.register.USER_ID_ARGUMENT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val getUserByIdUseCase: GetUserByIdUseCase,
+    private val updateUserUseCase: UpdateUserUseCase
 ) : ViewModel() {
 
     val userId = savedStateHandle.get<String>(USER_ID_ARGUMENT)
+
+    private val _userData = MutableStateFlow<UserData?>(null)
+    val userData = _userData.asStateFlow()
+
+    var isProgress = false
 
     private val _email = MutableStateFlow(EMPTY_STRING)
     val email = _email.asStateFlow()
@@ -87,6 +99,37 @@ class RegisterViewModel @Inject constructor(
         }
 
         return isValid
+    }
+
+    fun getUserById(id: String?) {
+        isProgress = true
+        viewModelScope.launch {
+            val result = getUserByIdUseCase(id.orEmpty())
+            if (result.isSuccess) {
+                _userData.value = result.getOrNull()
+            }
+            isProgress = false
+        }
+    }
+
+    fun updateUser(
+        email: String?,
+        contact: String?
+    ): Boolean {
+        isProgress = true
+        var result = false
+        _userData.value = _userData.value?.copy(
+            email = email,
+            contact = contact
+        )
+        viewModelScope.launch {
+            _userData.value?.let {
+                val resultUpdate = updateUserUseCase(it)
+                result = resultUpdate.isSuccess
+            }
+            isProgress = false
+        }
+        return result
     }
 
     companion object {

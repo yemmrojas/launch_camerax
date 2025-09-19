@@ -25,6 +25,7 @@ import com.example.launchcamera.screen.camera.state.IconConfig
 import com.example.launchcamera.screen.camera.state.ScanState
 import com.example.launchcamera.screen.camera.viewModel.CameraScannerViewModel
 import com.example.launchcamera.screen.components.ButtonSecondary
+import com.example.launchcamera.screen.components.ProgressBarView
 import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextTitle
 import com.example.launchcamera.ui.theme.Purple40
@@ -88,21 +89,6 @@ private fun CameraScannerWelcomeScreen(
                 onSuccessScanner
             )
         }
-    }
-}
-
-@Composable
-fun ProgressBarView() {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(50.dp),
-            color = Purple80,
-            strokeWidth = 5.dp
-        )
     }
 }
 

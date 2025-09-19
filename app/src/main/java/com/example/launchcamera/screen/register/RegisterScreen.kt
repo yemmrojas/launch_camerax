@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.launchcamera.screen.components.ButtonPrimary
+import com.example.launchcamera.screen.components.ProgressBarView
 import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextFieldCommon
 import com.example.launchcamera.screen.components.TextTitle
@@ -27,18 +28,24 @@ fun RegisterScreen(
     viewModel: RegisterViewModel,
     onNavProfile: () -> Unit
 ) {
-    Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        viewModel.userId?.TitleRegister()
-        DescriptionRegister()
-        TextFieldEmailRegister(viewModel)
-        TextConfirmEmailRegister(viewModel)
-        TextFieldPhoneRegister(viewModel)
-        ButtonRegister(viewModel, onNavProfile)
+//    if (viewModel.isProgress) {
+//        ProgressBarView()
+//    } else {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            viewModel.getUserById(viewModel.userId)
+            val userData = viewModel.userData.collectAsState()
+            userData.value?.name?.TitleRegister()
+            DescriptionRegister()
+            TextFieldEmailRegister(viewModel)
+            TextConfirmEmailRegister(viewModel)
+            TextFieldPhoneRegister(viewModel)
+            ButtonRegister(viewModel, onNavProfile)
+        }
     }
-}
+//}
 
 @Composable
 private fun String.TitleRegister() {
@@ -131,7 +138,13 @@ private fun ButtonRegister(viewModel: RegisterViewModel, onNavProfile: () -> Uni
         text = "Register",
         onClick = {
             if (viewModel.validateFields()) {
-                onNavProfile()
+                val result = viewModel.updateUser(
+                    viewModel.userData.value?.email,
+                    viewModel.phone.value
+                )
+                if (result) {
+                    onNavProfile()
+                }
             }
         },
         modifier = Modifier

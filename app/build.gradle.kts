@@ -70,6 +70,10 @@ dependencies {
     implementation(libs.accompanist.permissions)
     // Ml kit
     implementation(libs.mlkit.text.recognition)
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.kps)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

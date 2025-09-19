@@ -35,7 +35,7 @@ private const val LOGIN_DESCRIPTION =
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel,
-    onLoginClicked: () -> Unit,
+    onLoginClicked: (String) -> Unit,
     onRegisterClicked: () -> Unit
 ) {
     val verticalArrangement: Arrangement.Vertical = Arrangement.Center
@@ -151,12 +151,13 @@ private fun SwitchSaveSession(viewModel: LoginViewModel) {
 }
 
 @Composable
-private fun ButtonLogin(viewModel: LoginViewModel, onLoginClicked: () -> Unit) {
+private fun ButtonLogin(viewModel: LoginViewModel, onLoginClicked: (String) -> Unit) {
     ButtonPrimary(
         text = "Login",
         onClick = {
             if (viewModel.validateId()) {
-                onLoginClicked()
+                val userId = viewModel.id.value
+                onLoginClicked(userId)
             }
         },
         modifier = Modifier
