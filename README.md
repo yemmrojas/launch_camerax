@@ -10,7 +10,7 @@ Proyecto de demostración para Android que simplifica el proceso de registro de 
 
 | document scanning with camera x | Updating missing fields for registration | Log in and navigate to the profile screen |
 |---------------------------------|------------------------------------------|-------------------------------------------|
-| <img width="300" src="https://github.com/user-attachments/assets/712d664f-7ab1-43b2-856e-a3607b3b11bd" />|||
+| <img width="300" src="https://github.com/user-attachments/assets/712d664f-7ab1-43b2-856e-a3607b3b11bd" />|<img width="300" src="https://github.com/user-attachments/assets/60290069-17bf-4869-a148-5faf0c067ab8"/>|<img width="300" src="https://github.com/user-attachments/assets/61e71bd0-c57e-4c9a-abe9-770f1fdd336b"/>|
 
 ---
 
