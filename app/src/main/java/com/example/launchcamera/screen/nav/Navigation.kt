@@ -20,6 +20,7 @@ import com.example.launchcamera.screen.profile.viewModel.ProfileViewModel
 import com.example.launchcamera.screen.register.REGISTER_ROUTE
 import com.example.launchcamera.screen.register.RegisterScreen
 import com.example.launchcamera.screen.register.USER_ID_ARGUMENT
+import com.example.launchcamera.screen.register.USER_NAME_ARGUMENT
 import com.example.launchcamera.screen.register.viewModel.RegisterViewModel
 
 @Composable
@@ -30,8 +31,8 @@ fun Navigation() {
             val loginViewModel: LoginViewModel = hiltViewModel()
             LoginScreen(
                 viewModel = loginViewModel,
-                onLoginClicked = {
-                    navController.navigate("$PROFILE_ROUTE/$it") {
+                onLoginClicked = { userId ->
+                    navController.navigate("$PROFILE_ROUTE/$userId") {
                         popUpTo(0)
                     }
                 },
@@ -45,16 +46,16 @@ fun Navigation() {
             val cameraScannerViewModel: CameraScannerViewModel = hiltViewModel()
             CameraScannerScreen(
                 viewModel = cameraScannerViewModel,
-                onSuccessScanner = { userId ->
-                    navController.navigate("$REGISTER_ROUTE/$userId")
+                onSuccessScanner = { userName, userId ->
+                    navController.navigate("$REGISTER_ROUTE/$userName/$userId")
                 }
             )
         }
 
         composable(
-            route = "$REGISTER_ROUTE/{$USER_ID_ARGUMENT}",
+            route = "$REGISTER_ROUTE/{$USER_NAME_ARGUMENT}/{$USER_ID_ARGUMENT}",
             arguments = listOf(navArgument(
-                name= USER_ID_ARGUMENT
+                name= USER_NAME_ARGUMENT
             ) {
                 type = NavType.StringType
             })
@@ -70,11 +71,12 @@ fun Navigation() {
 
         composable(
             route = "$PROFILE_ROUTE/{$PROFILE_ID_ARGUMENT}",
-            arguments = listOf(navArgument(
-                name = PROFILE_ID_ARGUMENT
-            ){
-                type = NavType.StringType
-            })
+            arguments = listOf(
+                navArgument(
+                    name = PROFILE_ID_ARGUMENT
+                ) {
+                    type = NavType.StringType
+                })
         ) {
             val viewModel: ProfileViewModel = hiltViewModel()
             ProfileScreen(

@@ -1,6 +1,5 @@
 package com.example.launchcamera.screen.register
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,13 +16,20 @@ import com.example.launchcamera.screen.components.ProgressBarView
 import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextFieldCommon
 import com.example.launchcamera.screen.components.TextTitle
-import com.example.launchcamera.screen.state.ScreenState
 import com.example.launchcamera.screen.register.viewModel.RegisterViewModel
+import com.example.launchcamera.screen.shield.ShieldResultScreen
+import com.example.launchcamera.screen.shield.state.IconType
+import com.example.launchcamera.screen.state.ScreenState
 
 internal const val USER_ID_ARGUMENT = "userId"
+internal const val USER_NAME_ARGUMENT = "userName"
 internal const val REGISTER_ROUTE = "register"
 private const val TITLE_REGISTER = "Hi %s !"
 private const val DESCRIPTION_REGISTER = "Enter the data to complete the registration."
+private const val REGISTER_SUCCESS = "Register success"
+private const val REGISTER_ERROR = "Register error"
+private const val REGISTER_MESSAGE_SUCCESS =
+    "Congratulations on your registration. To continue using the app, go to login and enter your ID number."
 
 @Composable
 fun RegisterScreen(
@@ -34,30 +40,38 @@ fun RegisterScreen(
     when (registryState.value) {
         is ScreenState.Error -> {
             val messageError = viewModel.messageError.collectAsState()
-            Log.e("RegisterScreen", messageError.value.orEmpty())
+            ShieldResultScreen(
+                IconType.ERROR,
+                REGISTER_ERROR,
+                messageError.value,
+            ) { onNavProfile() }
         }
-        ScreenState.Idle -> viewModel.getUserById(viewModel.userId)
+        ScreenState.Idle -> RegisterScreenContent(viewModel)
         ScreenState.Loading -> ProgressBarView()
-        ScreenState.Success -> RegisterScreenContent(viewModel, onNavProfile)
+        ScreenState.Success -> ShieldResultScreen(
+            IconType.SUCCESS,
+            REGISTER_SUCCESS,
+            REGISTER_MESSAGE_SUCCESS
+        ) {
+            onNavProfile()
+        }
     }
 }
 
 @Composable
 fun RegisterScreenContent(
-    viewModel: RegisterViewModel,
-    onNavProfile: () -> Unit
+    viewModel: RegisterViewModel
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize()
     ) {
-        val userData = viewModel.userData.collectAsState()
-        userData.value?.name?.TitleRegister()
+        viewModel.userName?.TitleRegister()
         DescriptionRegister()
         TextFieldEmailRegister(viewModel)
         TextConfirmEmailRegister(viewModel)
         TextFieldPhoneRegister(viewModel)
-        ButtonRegister(viewModel, onNavProfile)
+        ButtonRegister(viewModel)
     }
 }
 
@@ -147,12 +161,12 @@ private fun TextFieldPhoneRegister(viewModel: RegisterViewModel) {
 }
 
 @Composable
-private fun ButtonRegister(viewModel: RegisterViewModel, onNavProfile: () -> Unit) {
+private fun ButtonRegister(viewModel: RegisterViewModel) {
     ButtonPrimary(
         text = "Register",
         onClick = {
             if (viewModel.validateFields()) {
-                updateUserResult(viewModel, onNavProfile)
+                viewModel.updateUser()
             }
         },
         modifier = Modifier
@@ -164,14 +178,3 @@ private fun ButtonRegister(viewModel: RegisterViewModel, onNavProfile: () -> Uni
     )
 }
 
-private fun updateUserResult(
-    viewModel: RegisterViewModel,
-    onNavProfile: () -> Unit
-) {
-    val email = viewModel.email.value
-    val phone = viewModel.phone.value
-    viewModel.updateUser(email, phone)
-    if (viewModel.resultUpdate) {
-        onNavProfile()
-    }
-}

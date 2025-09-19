@@ -27,10 +27,13 @@ class UserRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
 
-    override suspend fun updateUser(userData: UserData): Result<Boolean> =
+    override suspend fun updateUser(
+        id: String,
+        email: String,
+        phone: String
+    ): Result<Boolean> =
         try {
-            val entity = converterUserEntity(userData)
-            userDao.updateUserData(entity)
+            userDao.updateUserContactInfo(id, email, phone)
             Result.success(true)
         } catch (e: Exception) {
             Result.failure(e)

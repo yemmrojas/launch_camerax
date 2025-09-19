@@ -2,8 +2,8 @@ package com.example.launchcamera.screen.login.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.launchcamera.domain.model.UserData
 import com.example.launchcamera.domain.usescases.GetUserByIdUseCase
+import com.example.launchcamera.screen.state.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,10 +16,8 @@ class LoginViewModel @Inject constructor(
     private val getUserByIdUseCase: GetUserByIdUseCase
 ) : ViewModel() {
 
-    var isLoading = false
-
-    private val _user = MutableStateFlow<UserData?>(null)
-    val user = _user.asStateFlow()
+    private val _stateLogin = MutableStateFlow<ScreenState>(ScreenState.Idle)
+    val stateLogin = _stateLogin.asStateFlow()
 
     private val _id = MutableStateFlow("")
     val id = _id.asStateFlow()
@@ -52,18 +50,18 @@ class LoginViewModel @Inject constructor(
     }
 
     fun getUserById(id: String) {
-        isLoading = true
+        _stateLogin.value = ScreenState.Loading
         viewModelScope.launch {
             val result = getUserByIdUseCase(id)
-            if (result.isSuccess) {
-                result.map {
-                    _user.value = it
-                }
-                isLoading = false
+            if (result.isSuccess && result.getOrNull() != null) {
+                _stateLogin.value = ScreenState.Success
             } else {
-                isLoading = false
-                _idError.value = result.exceptionOrNull()?.message
+                _stateLogin.value = ScreenState.Error
             }
         }
+    }
+
+    fun resetState() {
+        _stateLogin.value = ScreenState.Idle
     }
 }

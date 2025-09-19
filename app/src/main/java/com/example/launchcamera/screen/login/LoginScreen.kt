@@ -26,6 +26,7 @@ import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextFieldCommon
 import com.example.launchcamera.screen.components.TextTitle
 import com.example.launchcamera.screen.login.viewModel.LoginViewModel
+import com.example.launchcamera.screen.state.ScreenState
 import com.example.launchcamera.ui.theme.Purple40
 
 internal const val LOGIN_ROUTE = "login"
@@ -39,17 +40,22 @@ fun LoginScreen(
     onLoginClicked: (String) -> Unit,
     onRegisterClicked: () -> Unit
 ) {
-    if (viewModel.isLoading) {
-        ProgressBarView()
-    } else {
-        LoginScreenContent(viewModel, onLoginClicked, onRegisterClicked)
+    when (viewModel.stateLogin.collectAsState().value) {
+        ScreenState.Error -> {}
+        ScreenState.Idle -> {}
+        ScreenState.Loading -> ProgressBarView()
+        ScreenState.Success -> {
+            val userId = viewModel.id.collectAsState().value
+            onLoginClicked(userId)
+            viewModel.resetState()
+        }
     }
+    LoginScreenContent(viewModel, onRegisterClicked)
 }
 
 @Composable
 fun LoginScreenContent(
     viewModel: LoginViewModel,
-    onLoginClicked: (String) -> Unit,
     onRegisterClicked: () -> Unit
 ) {
     val verticalArrangement: Arrangement.Vertical = Arrangement.Center
@@ -76,7 +82,7 @@ fun LoginScreenContent(
         )
         TextInputUsername(viewModel)
         SwitchSaveSession(viewModel)
-        ButtonLogin(viewModel, onLoginClicked)
+        ButtonLogin(viewModel)
         ButtonLoginRegister(onRegisterClicked)
     }
 }
@@ -165,16 +171,13 @@ private fun SwitchSaveSession(viewModel: LoginViewModel) {
 }
 
 @Composable
-private fun ButtonLogin(viewModel: LoginViewModel, onLoginClicked: (String) -> Unit) {
+private fun ButtonLogin(viewModel: LoginViewModel) {
     ButtonPrimary(
         text = "Login",
         onClick = {
             if (viewModel.validateId()) {
                 val userId = viewModel.id.value
                 viewModel.getUserById(userId)
-                if (viewModel.user.value != null) {
-                    onLoginClicked(userId)
-                }
             }
         },
         modifier = Modifier

@@ -13,8 +13,13 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUserData(userData: UserDataEntity)
 
-    @Update
-    suspend fun updateUserData(userData: UserDataEntity)
+
+    @Query("UPDATE user_data SET email = :email, phone = :phone WHERE document_id = :id")
+    suspend fun updateUserContactInfo(
+        id: String,
+        email: String,
+        phone: String
+    )
 
     @Query("DELETE FROM user_data WHERE document_id = :id")
     suspend fun deleteUserData(id: String)

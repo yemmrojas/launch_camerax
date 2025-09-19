@@ -26,23 +26,35 @@ import com.example.launchcamera.screen.components.ProgressBarView
 import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextTitle
 import com.example.launchcamera.screen.profile.viewModel.ProfileViewModel
+import com.example.launchcamera.screen.shield.ShieldResultScreen
+import com.example.launchcamera.screen.shield.state.IconType
+import com.example.launchcamera.screen.state.ScreenState
 import com.example.launchcamera.ui.theme.Purple40
 import com.example.launchcamera.ui.theme.Purple80
 
 internal const val PROFILE_ID_ARGUMENT = "userId"
 internal const val PROFILE_ROUTE = "profile"
+private const val TITLE_ERROR_GET_PROFILE = "An error occurred while trying to obtain the data"
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel,
     onLogoutClicked: () -> Unit
 ) {
-    val userId = viewModel.userId?.isEmpty()
-    viewModel.getUserById(userId.toString())
-    if (viewModel.isLoading) {
-        ProgressBarView()
-    } else {
-        ProfileScreenContent(viewModel, onLogoutClicked)
+    val userId = viewModel.userId
+
+    val state = viewModel.stateProfile.collectAsState()
+    when(state.value) {
+        ScreenState.Error -> ShieldResultScreen(
+            IconType.ERROR,
+            TITLE_ERROR_GET_PROFILE,
+            viewModel.messageError.collectAsState().value
+        ) {
+            onLogoutClicked()
+        }
+        ScreenState.Idle -> viewModel.getUserById(userId)
+        ScreenState.Loading -> ProgressBarView()
+        ScreenState.Success -> ProfileScreenContent(viewModel, onLogoutClicked)
     }
 }
 
@@ -144,7 +156,7 @@ private fun ContentSection(userData: UserData?) {
             modifier = Modifier.weight(1f)
         )
         TextContent(
-            content = userData?.name.toString(),
+            content = userData?.email.toString(),
             textAlign = TextAlign.End,
             modifier = Modifier.weight(1f)
         )
