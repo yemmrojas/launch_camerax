@@ -6,7 +6,11 @@
 
 Proyecto de demostración para Android que simplifica el proceso de registro de usuarios mediante el escaneo de documentos de identidad, utilizando **Jetpack CameraX**, **reconocimiento de texto (OCR)** y una implementación basada en **Arquitectura Limpia (Clean Architecture)**.
 
+# Screenshot
 
+| document scanning with camera x | Updating missing fields for registration |
+|---------------------------------|------------------------------------------|
+| <img width="300" src="https://github.com/user-attachments/assets/712d664f-7ab1-43b2-856e-a3607b3b11bd" />||
 
 ---
 
