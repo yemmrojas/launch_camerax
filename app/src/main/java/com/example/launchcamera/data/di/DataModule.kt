@@ -1,7 +1,7 @@
 package com.example.launchcamera.data.di
 
-import com.example.launchcamera.data.datasource.OcrDatasource
-import com.example.launchcamera.data.impl.MlKitOcrDatasource
+import com.example.launchcamera.domain.repository.OcrDataRepository
+import com.example.launchcamera.data.datasource.MlKitOcrDatasource
 import com.example.launchcamera.data.parser.ExtractedDataValidatorImpl
 import com.example.launchcamera.data.parser.IdentityCardExtractor
 import com.example.launchcamera.data.parser.MLKitTextParserImpl
@@ -26,7 +26,7 @@ abstract class DataModule {
     @Singleton
     abstract fun bindOcrDatasource(
         mlKitOcrDatasource: MlKitOcrDatasource
-    ) : OcrDatasource
+    ) : OcrDataRepository
 
     @Binds
     @Singleton

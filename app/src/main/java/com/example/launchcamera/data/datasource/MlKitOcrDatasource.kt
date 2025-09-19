@@ -1,8 +1,8 @@
-package com.example.launchcamera.data.impl
+package com.example.launchcamera.data.datasource
 
 import android.annotation.SuppressLint
 import androidx.camera.core.ImageProxy
-import com.example.launchcamera.data.datasource.OcrDatasource
+import com.example.launchcamera.domain.repository.OcrDataRepository
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
@@ -13,7 +13,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
 @SuppressLint("UnsafeOptInUsageError")
-class MlKitOcrDatasource @Inject constructor() : OcrDatasource {
+class MlKitOcrDatasource @Inject constructor() : OcrDataRepository {
 
     override suspend fun recognizeText(imageProxy: ImageProxy): Result<Text> = try {
         val recognizedText = processImageWithMlKit(imageProxy)

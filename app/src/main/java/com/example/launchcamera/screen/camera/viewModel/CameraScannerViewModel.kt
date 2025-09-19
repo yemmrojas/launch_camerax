@@ -92,7 +92,6 @@ class CameraScannerViewModel @Inject constructor(
             result.getOrNull()?.let { newUserData ->
                 updateUserData(newUserData)
                 updateScanStateBasedOnUserData(newUserData)
-                saveUser(newUserData)
             }
             isProgress = false
         } else {
@@ -107,6 +106,7 @@ class CameraScannerViewModel @Inject constructor(
 
     private fun updateScanStateBasedOnUserData(userData: UserData) {
         val newScanState = if (userDataValidator.isUserDataComplete(userData)) {
+            saveUser(userData)
             ScanState.FINISH
         } else {
             ScanState.BACK_SIDE

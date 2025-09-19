@@ -1,8 +1,9 @@
-package com.example.launchcamera.domain.repository
+package com.example.launchcamera.data.datasource
 
 import com.example.launchcamera.data.datasource.dao.UserDao
 import com.example.launchcamera.data.model.UserDataEntity
 import com.example.launchcamera.domain.model.UserData
+import com.example.launchcamera.domain.repository.UserRepository
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
