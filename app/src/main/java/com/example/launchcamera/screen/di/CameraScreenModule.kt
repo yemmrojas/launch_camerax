@@ -1,4 +1,4 @@
-package com.example.launchcamera.screen.camera.di
+package com.example.launchcamera.screen.di
 
 import com.example.launchcamera.screen.camera.provider.CameraScannerContentProvider
 import com.example.launchcamera.screen.camera.provider.UserDataValidator

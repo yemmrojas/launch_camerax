@@ -1,6 +1,5 @@
 package com.example.launchcamera.screen.camera
 
-import android.widget.ProgressBar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,9 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,10 +22,10 @@ import com.example.launchcamera.screen.camera.state.IconConfig
 import com.example.launchcamera.screen.camera.state.ScanState
 import com.example.launchcamera.screen.camera.viewModel.CameraScannerViewModel
 import com.example.launchcamera.screen.components.ButtonSecondary
+import com.example.launchcamera.screen.components.ProgressBarView
 import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextTitle
 import com.example.launchcamera.ui.theme.Purple40
-import com.example.launchcamera.ui.theme.Purple80
 
 internal const val CAMERA_SCANNER_ROUTE = "camera"
 private const val DESCRIPTION_IMAGE_CAMERA_SCANNER = "Image of camera"
@@ -36,7 +33,7 @@ private const val DESCRIPTION_IMAGE_CAMERA_SCANNER = "Image of camera"
 @Composable
 fun CameraScannerScreen(
     viewModel: CameraScannerViewModel,
-    onSuccessScanner: (String) -> Unit
+    onSuccessScanner: (String, String) -> Unit
 ) {
 
     val cameraScannerState = viewModel.cameraScannerState.collectAsState().value
@@ -58,7 +55,7 @@ fun CameraScannerScreen(
 @Composable
 private fun CameraScannerWelcomeScreen(
     viewModel: CameraScannerViewModel,
-    onSuccessScanner: (String) -> Unit
+    onSuccessScanner: (String, String) -> Unit
 ) {
     val verticalArrangement: Arrangement.Vertical = Arrangement.Center
     val cameraScannerState = viewModel.cameraScannerState.collectAsState().value
@@ -88,21 +85,6 @@ private fun CameraScannerWelcomeScreen(
                 onSuccessScanner
             )
         }
-    }
-}
-
-@Composable
-fun ProgressBarView() {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(50.dp),
-            color = Purple80,
-            strokeWidth = 5.dp
-        )
     }
 }
 
@@ -162,7 +144,7 @@ private fun DescriptionCameraScanner(description: String) {
 @Composable
 private fun ButtonCameraScanner(
     viewModel: CameraScannerViewModel,
-    onSuccessScanner: (String) -> Unit
+    onSuccessScanner: (String, String) -> Unit
 ) {
     val cameraScannerState = viewModel.cameraScannerState.collectAsState().value
     val scanState = cameraScannerState.scanState
@@ -171,7 +153,7 @@ private fun ButtonCameraScanner(
         text = viewModel.getButtonText(scanState),
         onClick = {
             if (cameraScannerState.scanState == ScanState.FINISH) {
-                onSuccessScanner(cameraScannerState.userData.id)
+                onSuccessScanner(cameraScannerState.userData.name, cameraScannerState.userData.id)
             } else {
                 viewModel.onMainButtonPressed()
             }

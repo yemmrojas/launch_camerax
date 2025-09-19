@@ -14,7 +14,7 @@ fun TextContent(
     content: String,
     color: Color = PurpleGrey40,
     textAlign: TextAlign = TextAlign.Left,
-    modifier: Modifier = Modifier
+    modifier: Modifier
 ) {
     Text(
         text = content,

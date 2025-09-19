@@ -2,20 +2,33 @@ package com.example.launchcamera.screen.register.viewModel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.launchcamera.domain.usescases.UpdateUserUseCase
 import com.example.launchcamera.screen.register.USER_ID_ARGUMENT
+import com.example.launchcamera.screen.register.USER_NAME_ARGUMENT
+import com.example.launchcamera.screen.state.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val updateUserUseCase: UpdateUserUseCase
 ) : ViewModel() {
 
-    val userId = savedStateHandle.get<String>(USER_ID_ARGUMENT)
+    val userName = savedStateHandle.get<String>(USER_NAME_ARGUMENT)
+    private var userId = savedStateHandle.get<String>(USER_ID_ARGUMENT)
+
+    private val _registryState = MutableStateFlow<ScreenState>(ScreenState.Idle)
+    val registryState = _registryState.asStateFlow()
+
+    private val _messageError = MutableStateFlow("")
+    val messageError = _messageError.asStateFlow()
 
     private val _email = MutableStateFlow(EMPTY_STRING)
     val email = _email.asStateFlow()
@@ -87,6 +100,23 @@ class RegisterViewModel @Inject constructor(
         }
 
         return isValid
+    }
+
+    fun updateUser() {
+        _registryState.value = ScreenState.Loading
+        viewModelScope.launch {
+            val result = updateUserUseCase(
+                userId.orEmpty(),
+                _email.value,
+                _phone.value
+            )
+            if (result.isSuccess) {
+                _registryState.value = ScreenState.Success
+            } else {
+                _registryState.value = ScreenState.Error
+                _messageError.value = result.exceptionOrNull()?.message.orEmpty()
+            }
+        }
     }
 
     companion object {

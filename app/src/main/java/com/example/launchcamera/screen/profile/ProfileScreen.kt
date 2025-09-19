@@ -14,37 +14,71 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.launchcamera.domain.model.UserData
 import com.example.launchcamera.screen.components.ButtonPrimary
+import com.example.launchcamera.screen.components.ProgressBarView
 import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextTitle
+import com.example.launchcamera.screen.profile.viewModel.ProfileViewModel
+import com.example.launchcamera.screen.shield.ShieldResultScreen
+import com.example.launchcamera.screen.shield.state.IconType
+import com.example.launchcamera.screen.state.ScreenState
 import com.example.launchcamera.ui.theme.Purple40
 import com.example.launchcamera.ui.theme.Purple80
 
+internal const val PROFILE_ID_ARGUMENT = "userId"
 internal const val PROFILE_ROUTE = "profile"
+private const val TITLE_ERROR_GET_PROFILE = "An error occurred while trying to obtain the data"
 
 @Composable
 fun ProfileScreen(
+    viewModel: ProfileViewModel,
     onLogoutClicked: () -> Unit
 ) {
+    val userId = viewModel.userId
+
+    val state = viewModel.stateProfile.collectAsState()
+    when(state.value) {
+        ScreenState.Error -> ShieldResultScreen(
+            IconType.ERROR,
+            TITLE_ERROR_GET_PROFILE,
+            viewModel.messageError.collectAsState().value
+        ) {
+            onLogoutClicked()
+        }
+        ScreenState.Idle -> viewModel.getUserById(userId)
+        ScreenState.Loading -> ProgressBarView()
+        ScreenState.Success -> ProfileScreenContent(viewModel, onLogoutClicked)
+    }
+}
+
+@Composable
+fun ProfileScreenContent(
+    viewModel: ProfileViewModel,
+    onLogoutClicked: () -> Unit
+) {
+    val userData = viewModel.userData.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        HeaderSection()
-        ContentSection()
+        HeaderSection(userData.value?.name)
+        ContentSection(userData.value)
         ButtonLonOut(onLogoutClicked)
     }
 }
 
 @Composable
-fun HeaderSection() {
+fun HeaderSection(name: String?) {
     Column(
         modifier = Modifier
+            .padding(16.dp)
             .background(Purple40)
             .fillMaxWidth()
     ) {
@@ -72,12 +106,11 @@ fun HeaderSection() {
         }
 
         TextTitle(
-            title = "Hi, David Martinez",
+            title = "Hi, $name",
             color = Color.White,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    top = 8.dp,
                     bottom = 32.dp,
                     start = 32.dp,
                     end = 32.dp
@@ -88,7 +121,7 @@ fun HeaderSection() {
 }
 
 @Composable
-private fun ContentSection() {
+private fun ContentSection(userData: UserData?) {
     Row(
         modifier = Modifier
             .padding(
@@ -103,7 +136,7 @@ private fun ContentSection() {
             modifier = Modifier.weight(1f)
         )
         TextContent(
-            content = "1234567899:",
+            content = userData?.id.toString(),
             textAlign = TextAlign.End,
             modifier = Modifier.weight(1f)
         )
@@ -123,7 +156,7 @@ private fun ContentSection() {
             modifier = Modifier.weight(1f)
         )
         TextContent(
-            content = "user@email.com",
+            content = userData?.email.toString(),
             textAlign = TextAlign.End,
             modifier = Modifier.weight(1f)
         )
@@ -143,7 +176,7 @@ private fun ContentSection() {
             modifier = Modifier.weight(1f)
         )
         TextContent(
-            content = "+1 234 567 890",
+            content = "+57 ${userData?.contact}",
             textAlign = TextAlign.End,
             modifier = Modifier.weight(1f)
         )
@@ -163,7 +196,7 @@ private fun ContentSection() {
             modifier = Modifier.weight(1f)
         )
         TextContent(
-            content = "10/10/1990",
+            content = "${userData?.birthDate}",
             textAlign = TextAlign.End,
             modifier = Modifier.weight(1f)
         )

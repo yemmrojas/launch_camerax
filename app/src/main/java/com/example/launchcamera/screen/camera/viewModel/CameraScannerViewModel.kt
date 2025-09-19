@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.launchcamera.domain.model.UserData
 import com.example.launchcamera.domain.usescases.ExtractTextFromImageUseCase
+import com.example.launchcamera.domain.usescases.SaveUserUseCase
 import com.example.launchcamera.screen.camera.provider.CameraScannerContentProvider
 import com.example.launchcamera.screen.camera.provider.UserDataValidator
 import com.example.launchcamera.screen.camera.state.CameraPermissionState
@@ -22,6 +23,7 @@ class CameraScannerViewModel @Inject constructor(
     private val extractTextFromImageUseCase: ExtractTextFromImageUseCase,
     private val userDataValidator: UserDataValidator,
     private val cameraScannerContentProvider: CameraScannerContentProvider,
+    private val saveUserUseCase: SaveUserUseCase
 ) : ViewModel() {
 
     private val _cameraScannerState = MutableStateFlow(CameraScannerState())
@@ -90,6 +92,7 @@ class CameraScannerViewModel @Inject constructor(
             result.getOrNull()?.let { newUserData ->
                 updateUserData(newUserData)
                 updateScanStateBasedOnUserData(newUserData)
+                saveUser(newUserData)
             }
             isProgress = false
         } else {
@@ -113,6 +116,16 @@ class CameraScannerViewModel @Inject constructor(
 
     private fun updateScanState(scanState: ScanState) {
         _cameraScannerState.value = _cameraScannerState.value.copy(scanState = scanState)
+    }
+
+    private fun saveUser(userData: UserData) {
+        viewModelScope.launch {
+            val result = saveUserUseCase(userData)
+            if (result.isFailure) {
+                val message = result.exceptionOrNull()?.message.orEmpty()
+                handleScanError(message)
+            }
+        }
     }
 
     private fun handleScanError(errorMessage: String) {

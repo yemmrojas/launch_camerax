@@ -1,4 +1,4 @@
-package com.example.launchcamera.repository
+package com.example.launchcamera.domain.repository
 
 import androidx.camera.core.ImageProxy
 import com.example.launchcamera.data.datasource.OcrDatasource
