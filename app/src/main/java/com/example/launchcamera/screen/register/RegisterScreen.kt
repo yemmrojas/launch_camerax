@@ -1,5 +1,6 @@
 package com.example.launchcamera.screen.register
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import com.example.launchcamera.screen.components.ProgressBarView
 import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextFieldCommon
 import com.example.launchcamera.screen.components.TextTitle
+import com.example.launchcamera.screen.state.ScreenState
 import com.example.launchcamera.screen.register.viewModel.RegisterViewModel
 
 internal const val USER_ID_ARGUMENT = "userId"
@@ -28,24 +30,36 @@ fun RegisterScreen(
     viewModel: RegisterViewModel,
     onNavProfile: () -> Unit
 ) {
-//    if (viewModel.isProgress) {
-//        ProgressBarView()
-//    } else {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            viewModel.getUserById(viewModel.userId)
-            val userData = viewModel.userData.collectAsState()
-            userData.value?.name?.TitleRegister()
-            DescriptionRegister()
-            TextFieldEmailRegister(viewModel)
-            TextConfirmEmailRegister(viewModel)
-            TextFieldPhoneRegister(viewModel)
-            ButtonRegister(viewModel, onNavProfile)
+    val registryState = viewModel.registryState.collectAsState()
+    when (registryState.value) {
+        is ScreenState.Error -> {
+            val messageError = viewModel.messageError.collectAsState()
+            Log.e("RegisterScreen", messageError.value.orEmpty())
         }
+        ScreenState.Idle -> viewModel.getUserById(viewModel.userId)
+        ScreenState.Loading -> ProgressBarView()
+        ScreenState.Success -> RegisterScreenContent(viewModel, onNavProfile)
     }
-//}
+}
+
+@Composable
+fun RegisterScreenContent(
+    viewModel: RegisterViewModel,
+    onNavProfile: () -> Unit
+) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        val userData = viewModel.userData.collectAsState()
+        userData.value?.name?.TitleRegister()
+        DescriptionRegister()
+        TextFieldEmailRegister(viewModel)
+        TextConfirmEmailRegister(viewModel)
+        TextFieldPhoneRegister(viewModel)
+        ButtonRegister(viewModel, onNavProfile)
+    }
+}
 
 @Composable
 private fun String.TitleRegister() {
@@ -138,13 +152,7 @@ private fun ButtonRegister(viewModel: RegisterViewModel, onNavProfile: () -> Uni
         text = "Register",
         onClick = {
             if (viewModel.validateFields()) {
-                val result = viewModel.updateUser(
-                    viewModel.userData.value?.email,
-                    viewModel.phone.value
-                )
-                if (result) {
-                    onNavProfile()
-                }
+                updateUserResult(viewModel, onNavProfile)
             }
         },
         modifier = Modifier
@@ -154,4 +162,16 @@ private fun ButtonRegister(viewModel: RegisterViewModel, onNavProfile: () -> Uni
                 bottom = 32.dp
             )
     )
+}
+
+private fun updateUserResult(
+    viewModel: RegisterViewModel,
+    onNavProfile: () -> Unit
+) {
+    val email = viewModel.email.value
+    val phone = viewModel.phone.value
+    viewModel.updateUser(email, phone)
+    if (viewModel.resultUpdate) {
+        onNavProfile()
+    }
 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.launchcamera.screen.components.ButtonPrimary
 import com.example.launchcamera.screen.components.ButtonSecondary
+import com.example.launchcamera.screen.components.ProgressBarView
 import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextFieldCommon
 import com.example.launchcamera.screen.components.TextTitle
@@ -34,6 +35,19 @@ private const val LOGIN_DESCRIPTION =
 
 @Composable
 fun LoginScreen(
+    viewModel: LoginViewModel,
+    onLoginClicked: (String) -> Unit,
+    onRegisterClicked: () -> Unit
+) {
+    if (viewModel.isLoading) {
+        ProgressBarView()
+    } else {
+        LoginScreenContent(viewModel, onLoginClicked, onRegisterClicked)
+    }
+}
+
+@Composable
+fun LoginScreenContent(
     viewModel: LoginViewModel,
     onLoginClicked: (String) -> Unit,
     onRegisterClicked: () -> Unit
@@ -157,7 +171,10 @@ private fun ButtonLogin(viewModel: LoginViewModel, onLoginClicked: (String) -> U
         onClick = {
             if (viewModel.validateId()) {
                 val userId = viewModel.id.value
-                onLoginClicked(userId)
+                viewModel.getUserById(userId)
+                if (viewModel.user.value != null) {
+                    onLoginClicked(userId)
+                }
             }
         },
         modifier = Modifier

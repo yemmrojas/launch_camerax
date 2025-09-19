@@ -13,8 +13,10 @@ import com.example.launchcamera.screen.camera.viewModel.CameraScannerViewModel
 import com.example.launchcamera.screen.login.LOGIN_ROUTE
 import com.example.launchcamera.screen.login.LoginScreen
 import com.example.launchcamera.screen.login.viewModel.LoginViewModel
+import com.example.launchcamera.screen.profile.PROFILE_ID_ARGUMENT
 import com.example.launchcamera.screen.profile.PROFILE_ROUTE
 import com.example.launchcamera.screen.profile.ProfileScreen
+import com.example.launchcamera.screen.profile.viewModel.ProfileViewModel
 import com.example.launchcamera.screen.register.REGISTER_ROUTE
 import com.example.launchcamera.screen.register.RegisterScreen
 import com.example.launchcamera.screen.register.USER_ID_ARGUMENT
@@ -29,7 +31,7 @@ fun Navigation() {
             LoginScreen(
                 viewModel = loginViewModel,
                 onLoginClicked = {
-                    navController.navigate(PROFILE_ROUTE) {
+                    navController.navigate("$PROFILE_ROUTE/$it") {
                         popUpTo(0)
                     }
                 },
@@ -66,8 +68,17 @@ fun Navigation() {
             )
         }
 
-        composable(route = PROFILE_ROUTE) {
+        composable(
+            route = "$PROFILE_ROUTE/{$PROFILE_ID_ARGUMENT}",
+            arguments = listOf(navArgument(
+                name = PROFILE_ID_ARGUMENT
+            ){
+                type = NavType.StringType
+            })
+        ) {
+            val viewModel: ProfileViewModel = hiltViewModel()
             ProfileScreen(
+                viewModel = viewModel,
                 onLogoutClicked = {
                     navController.navigate(LOGIN_ROUTE) {
                         popUpTo(0)

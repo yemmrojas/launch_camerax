@@ -7,6 +7,7 @@ import com.example.launchcamera.domain.model.UserData
 import com.example.launchcamera.domain.usescases.GetUserByIdUseCase
 import com.example.launchcamera.domain.usescases.UpdateUserUseCase
 import com.example.launchcamera.screen.register.USER_ID_ARGUMENT
+import com.example.launchcamera.screen.state.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,7 +28,13 @@ class RegisterViewModel @Inject constructor(
     private val _userData = MutableStateFlow<UserData?>(null)
     val userData = _userData.asStateFlow()
 
-    var isProgress = false
+    var resultUpdate = false
+
+    private val _registryState = MutableStateFlow<ScreenState>(ScreenState.Idle)
+    val registryState = _registryState.asStateFlow()
+
+    private val _messageError = MutableStateFlow<String?>(null)
+    val messageError = _messageError.asStateFlow()
 
     private val _email = MutableStateFlow(EMPTY_STRING)
     val email = _email.asStateFlow()
@@ -102,34 +109,40 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun getUserById(id: String?) {
-        isProgress = true
+        _registryState.value = ScreenState.Loading
         viewModelScope.launch {
             val result = getUserByIdUseCase(id.orEmpty())
             if (result.isSuccess) {
                 _userData.value = result.getOrNull()
+                _registryState.value = ScreenState.Success
+            } else {
+                _registryState.value = ScreenState.Error
+                _messageError.value = result.exceptionOrNull()?.message
             }
-            isProgress = false
         }
     }
 
     fun updateUser(
         email: String?,
         contact: String?
-    ): Boolean {
-        isProgress = true
-        var result = false
+    ) {
+        _registryState.value = ScreenState.Loading
         _userData.value = _userData.value?.copy(
             email = email,
             contact = contact
         )
         viewModelScope.launch {
-            _userData.value?.let {
-                val resultUpdate = updateUserUseCase(it)
-                result = resultUpdate.isSuccess
+            _userData.value?.let { userData ->
+                val result = updateUserUseCase(userData)
+                if (result.isSuccess) {
+                    result.map { resultUpdate = it }
+                    _registryState.value = ScreenState.Success
+                } else {
+                    _registryState.value = ScreenState.Error
+                    _messageError.value = result.exceptionOrNull()?.message
+                }
             }
-            isProgress = false
         }
-        return result
     }
 
     companion object {
