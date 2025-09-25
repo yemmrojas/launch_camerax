@@ -30,9 +30,6 @@ class LoginViewModel @Inject constructor(
 
     fun onIdChanged(newId: String) {
         _id.update { newId }
-        if (newId.isNotBlank()) {
-            _idError.value = null
-        }
     }
 
     fun onSaveSessionChanged(save: Boolean) {
@@ -44,7 +41,7 @@ class LoginViewModel @Inject constructor(
             _idError.value = null
             true
         } else {
-            _idError.value = "ID cannot be empty"
+            _idError.value = MESSAGE_EMPTY_ID
             false
         }
     }
@@ -63,5 +60,9 @@ class LoginViewModel @Inject constructor(
 
     fun resetState() {
         _stateLogin.value = ScreenState.Idle
+    }
+
+    companion object {
+        internal const val MESSAGE_EMPTY_ID = "ID cannot be empty"
     }
 }
