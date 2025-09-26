@@ -9,6 +9,7 @@ import com.example.launchcamera.screen.login.viewModel.LoginViewModel
 import com.example.launchcamera.screen.login.viewModel.LoginViewModel.Companion.MESSAGE_EMPTY_ID
 import com.example.launchcamera.screen.state.ScreenState
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -57,6 +58,7 @@ class LoginViewModelTest {
             // When
             sut.getUserById(TEST_ID)
             // Then
+            coVerify { getUserByIdUseCase.invoke(TEST_ID) }
             assertEquals(ScreenState.Success, sut.stateLogin.value)
         }
 
@@ -70,6 +72,7 @@ class LoginViewModelTest {
         sut.getUserById(TEST_ID)
 
         // Then
+        coVerify { getUserByIdUseCase.invoke(TEST_ID) }
         assertEquals(ScreenState.Error, sut.stateLogin.value)
     }
 
@@ -84,6 +87,7 @@ class LoginViewModelTest {
             sut.getUserById(TEST_ID)
 
             // Then
+            coVerify { getUserByIdUseCase.invoke(TEST_ID) }
             assertEquals(ScreenState.Error, sut.stateLogin.value)
         }
 
@@ -96,6 +100,7 @@ class LoginViewModelTest {
             // When
             sut.getUserById(TEST_ID)
             // Then
+            coVerify { getUserByIdUseCase.invoke(TEST_ID) }
             assertEquals(ScreenState.Success, sut.stateLogin.value)
         }
 
