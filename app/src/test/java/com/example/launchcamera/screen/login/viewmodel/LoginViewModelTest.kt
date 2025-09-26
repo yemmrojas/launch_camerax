@@ -24,6 +24,28 @@ class LoginViewModelTest {
     val mainCoroutineRule = MainCoroutineRule()
 
     @Test
+    fun `onSaveSessionChanged should update value when save session is changed boolean then return true`() =runTest {
+        // Given
+        val isSaveSession = true
+        val sut = providesSut(mockk())
+        // When
+        sut.onSaveSessionChanged(isSaveSession)
+        // Then
+        assertEquals(isSaveSession, sut.saveSession.value)
+    }
+
+    @Test
+    fun `onSaveSessionChanged should update value when save session is changed boolean then return false`() = runTest {
+        // Given
+        val isSaveSession = false
+        val sut = providesSut(mockk())
+        // When
+        sut.onSaveSessionChanged(isSaveSession)
+        // Then
+        assertEquals(isSaveSession, sut.saveSession.value)
+    }
+
+    @Test
     fun `onIdChanged should update id value and clear error when new id is not blank`() = runTest {
         // Given
         val getUserByIdUseCase = providesGetUserById(TypeMockSimulator.SUCCESS)
