@@ -30,6 +30,10 @@ class LoginViewModel @Inject constructor(
 
     fun onIdChanged(newId: String) {
         _id.update { newId }
+        if (newId.isNotBlank()) {
+            _idError.value = null
+        }
+
     }
 
     fun onSaveSessionChanged(save: Boolean) {
