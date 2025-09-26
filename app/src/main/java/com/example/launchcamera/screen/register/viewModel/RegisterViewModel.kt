@@ -22,7 +22,7 @@ class RegisterViewModel @Inject constructor(
 ) : ViewModel() {
 
     val userName = savedStateHandle.get<String>(USER_NAME_ARGUMENT)
-    private var userId = savedStateHandle.get<String>(USER_ID_ARGUMENT)
+    internal var userId = savedStateHandle.get<String>(USER_ID_ARGUMENT)
 
     private val _registryState = MutableStateFlow<ScreenState>(ScreenState.Idle)
     val registryState = _registryState.asStateFlow()
@@ -110,7 +110,7 @@ class RegisterViewModel @Inject constructor(
                 _email.value,
                 _phone.value
             )
-            if (result.isSuccess) {
+            if (result.isSuccess && result.getOrNull() == true) {
                 _registryState.value = ScreenState.Success
             } else {
                 _registryState.value = ScreenState.Error

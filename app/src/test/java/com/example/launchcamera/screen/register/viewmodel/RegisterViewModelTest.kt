@@ -14,7 +14,9 @@ import com.example.launchcamera.screen.register.viewModel.RegisterViewModel.Comp
 import com.example.launchcamera.screen.register.viewModel.RegisterViewModel.Companion.MESSAGE_ERROR_EMAIL_EMPTY
 import com.example.launchcamera.screen.register.viewModel.RegisterViewModel.Companion.MESSAGE_ERROR_PHONE
 import com.example.launchcamera.screen.register.viewModel.RegisterViewModel.Companion.MESSAGE_ERROR_PHONE_EMPTY
+import com.example.launchcamera.screen.state.ScreenState
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
@@ -40,7 +42,7 @@ class RegisterViewModelTest {
             val sut = providesSut(userUseCase, saveStateHandle)
             // When
             sut.onEmailChanged(EMAIL_VALUE_TEST)
-            val result = sut.validateFields()
+            sut.validateFields()
             // Then
             assertEquals(EMAIL_VALUE_TEST, sut.email.value)
             assertEquals(null, sut.errorEmail.value)
@@ -88,7 +90,7 @@ class RegisterViewModelTest {
             // When
             sut.onEmailChanged(EMAIL_VALUE_TEST)
             sut.onConfirmEmailChanged(EMAIL_VALUE_TEST)
-            val result = sut.validateFields()
+            sut.validateFields()
             // Then
             assertEquals(EMAIL_VALUE_TEST, sut.confirmEmail.value)
             assertEquals(EMAIL_VALUE_TEST, sut.email.value)
@@ -189,12 +191,62 @@ class RegisterViewModelTest {
         assertTrue(result)
     }
 
+    @Test
+    fun `when updateUser is called and all data is correct then the data in the database is updated`() =
+        runTest {
+            // Given
+            val saveStateHandle = providesSaveStateHandle()
+            val userUseCase = providesUserUseCase(TypeMockSimulator.SUCCESS)
+            val sut = providesSut(userUseCase, saveStateHandle)
+            sut.onEmailChanged(EMAIL_VALUE_TEST)
+            sut.onConfirmEmailChanged(EMAIL_VALUE_TEST)
+            sut.onPhoneChanged(PHONE_NUMBER_TEST)
+            // When
+            sut.updateUser()
+            // Then
+            coVerify(exactly = 1) {
+                userUseCase.invoke(
+                    sut.userId.orEmpty(),
+                    sut.email.value,
+                    sut.phone.value
+                )
+            }
+            assertEquals(ScreenState.Success, sut.registryState.value)
+        }
+
+    @Test
+    fun `when updateUser is called and the data is not correct then the data in the database is not updated`() =
+        runTest {
+            // Given
+            val saveStateHandle = providesSaveStateHandle()
+            val userUseCase = providesUserUseCase(TypeMockSimulator.ERROR)
+            val sut = providesSut(userUseCase, saveStateHandle)
+            // When
+            sut.updateUser()
+            // Then
+            coVerify(exactly = 1) { userUseCase.invoke(any(), any(), any()) }
+            assertEquals(ScreenState.Error, sut.registryState.value)
+            assertEquals(EXPECTED_EXCEPTION_MESSAGE, sut.messageError.value)
+        }
+
+    @Test
+    fun `When updateUser is called and the data is not found in the database, then the data is not updated`() =
+        runTest {
+            // Given
+            val saveStateHandle = providesSaveStateHandle()
+            val userUseCase = providesUserUseCase(TypeMockSimulator.NULL)
+            val sut = providesSut(userUseCase, saveStateHandle)
+            // When
+            sut.updateUser()
+            // Then
+            coVerify(exactly = 1) { userUseCase.invoke(any(), any(), any()) }
+            assertEquals(ScreenState.Error, sut.registryState.value)
+        }
+
     private fun providesSut(
-        userUseCase: UpdateUserUseCase,
-        handle: SavedStateHandle
+        userUseCase: UpdateUserUseCase, handle: SavedStateHandle
     ) = RegisterViewModel(
-        savedStateHandle = handle,
-        updateUserUseCase = userUseCase
+        savedStateHandle = handle, updateUserUseCase = userUseCase
     )
 
     private fun providesSaveStateHandle() = mockk<SavedStateHandle>().also {
