@@ -119,7 +119,7 @@ class RegisterViewModel @Inject constructor(
         }
     }
 
-    companion object {
+    internal companion object {
         const val REGEX_EMAIL = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}\$"
         const val MESSAGE_ERROR_EMAIL = "The email is not valid"
         const val MESSAGE_ERROR_PHONE = "The phone number is not valid"
