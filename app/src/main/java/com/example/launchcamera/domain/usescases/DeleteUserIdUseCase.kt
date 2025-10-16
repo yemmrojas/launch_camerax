@@ -4,7 +4,7 @@ import com.example.launchcamera.domain.repository.LoginLocalDataRepository
 import javax.inject.Inject
 
 class DeleteUserIdUseCase @Inject constructor(
-    private val saveLoginRepository: LoginLocalDataRepository
+    private val loginLocalDataRepository: LoginLocalDataRepository
 ) {
-    suspend operator fun invoke() = saveLoginRepository.deleteId()
+    suspend operator fun invoke() = loginLocalDataRepository.deleteId()
 }

@@ -31,7 +31,7 @@ class ProfileViewModelTest {
             // Given
             val getUserByIdUseCase = providesGetUserByIdUseCase(TypeMockSimulator.SUCCESS)
             val saveStateHandle = providesSaveStateHandle()
-            val deleteUserIdUseCase = providesDeleteUserIdUseCase(TypeMockSimulator.SUCCESS)
+            val deleteUserIdUseCase = providesDeleteUserIdUseCase()
             val sut = providesSut(getUserByIdUseCase, saveStateHandle, deleteUserIdUseCase)
             // When
             sut.getUserById(USER_ID_TEST)
@@ -47,7 +47,7 @@ class ProfileViewModelTest {
             // Given
             val getUserByIdUseCase = providesGetUserByIdUseCase(TypeMockSimulator.ERROR)
             val saveStateHandle = providesSaveStateHandle()
-            val deleteUserIdUseCase = providesDeleteUserIdUseCase(TypeMockSimulator.SUCCESS)
+            val deleteUserIdUseCase = providesDeleteUserIdUseCase()
             val sut = providesSut(getUserByIdUseCase, saveStateHandle, deleteUserIdUseCase)
             // When
             sut.getUserById(USER_ID_TEST)
@@ -63,7 +63,7 @@ class ProfileViewModelTest {
             // Given
             val getUserByIdUseCase = providesGetUserByIdUseCase(TypeMockSimulator.NULL)
             val saveStateHandle = providesSaveStateHandle()
-            val deleteUserIdUseCase = providesDeleteUserIdUseCase(TypeMockSimulator.SUCCESS)
+            val deleteUserIdUseCase = providesDeleteUserIdUseCase()
             val sut = providesSut(getUserByIdUseCase, saveStateHandle, deleteUserIdUseCase)
             // When
             sut.getUserById(USER_ID_TEST)
@@ -79,7 +79,7 @@ class ProfileViewModelTest {
             // Give
             val getUserByIdUseCase = providesGetUserByIdUseCase(TypeMockSimulator.EMPTY)
             val saveStateHandle = providesSaveStateHandle()
-            val deleteUserIdUseCase = providesDeleteUserIdUseCase(TypeMockSimulator.SUCCESS)
+            val deleteUserIdUseCase = providesDeleteUserIdUseCase()
             val sut = providesSut(getUserByIdUseCase, saveStateHandle, deleteUserIdUseCase)
             // When
             sut.getUserById(USER_ID_TEST)
@@ -94,7 +94,7 @@ class ProfileViewModelTest {
         // Given
         val getUserByIdUseCase = providesGetUserByIdUseCase(TypeMockSimulator.SUCCESS)
         val saveStateHandle = providesSaveStateHandle()
-        val deleteUserIdUseCase = providesDeleteUserIdUseCase(TypeMockSimulator.SUCCESS)
+        val deleteUserIdUseCase = providesDeleteUserIdUseCase()
         val sut = providesSut(getUserByIdUseCase, saveStateHandle, deleteUserIdUseCase)
         // When
         sut.deleteUserId()
@@ -132,7 +132,7 @@ class ProfileViewModelTest {
         every { it.get<String>(any()) } returns USER_ID_TEST
     }
 
-    private fun providesDeleteUserIdUseCase(type: TypeMockSimulator) =
+    private fun providesDeleteUserIdUseCase() =
         mockk<DeleteUserIdUseCase>().also {
             coEvery { it.invoke() } returns Unit
         }

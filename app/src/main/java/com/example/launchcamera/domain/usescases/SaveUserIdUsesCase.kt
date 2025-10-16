@@ -4,7 +4,7 @@ import com.example.launchcamera.domain.repository.LoginLocalDataRepository
 import javax.inject.Inject
 
 class SaveUserIdUsesCase @Inject constructor(
-    private val saveLoginRepository: LoginLocalDataRepository
+    private val loginLocalDataRepository: LoginLocalDataRepository
 ) {
-    suspend operator fun invoke(id: String) = saveLoginRepository.saveId(id)
+    suspend operator fun invoke(id: String) = loginLocalDataRepository.saveId(id)
 }
