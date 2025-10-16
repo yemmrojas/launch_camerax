@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.launchcamera.domain.model.UserData
+import com.example.launchcamera.domain.usescases.DeleteUserIdUseCase
 import com.example.launchcamera.domain.usescases.GetUserByIdUseCase
 import com.example.launchcamera.screen.profile.PROFILE_ID_ARGUMENT
 import com.example.launchcamera.screen.state.ScreenState
@@ -17,6 +18,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val getUserByIdUseCase: GetUserByIdUseCase,
     savedStateHandle: SavedStateHandle,
+    private val deleteUserIdUseCase: DeleteUserIdUseCase
 ) : ViewModel() {
 
     val userId = savedStateHandle.get<String>(PROFILE_ID_ARGUMENT)
@@ -41,6 +43,12 @@ class ProfileViewModel @Inject constructor(
                 _stateProfile.value = ScreenState.Error
                 _messageError.value = result.exceptionOrNull()?.message.orEmpty()
             }
+        }
+    }
+
+    fun deleteUserId() {
+        viewModelScope.launch {
+            deleteUserIdUseCase()
         }
     }
 }

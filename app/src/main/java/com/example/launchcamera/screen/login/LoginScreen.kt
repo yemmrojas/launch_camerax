@@ -26,6 +26,8 @@ import com.example.launchcamera.screen.components.TextContent
 import com.example.launchcamera.screen.components.TextFieldCommon
 import com.example.launchcamera.screen.components.TextTitle
 import com.example.launchcamera.screen.login.viewModel.LoginViewModel
+import com.example.launchcamera.screen.shield.ShieldResultScreen
+import com.example.launchcamera.screen.shield.state.IconType
 import com.example.launchcamera.screen.state.ScreenState
 import com.example.launchcamera.ui.theme.Purple40
 
@@ -33,6 +35,10 @@ internal const val LOGIN_ROUTE = "login"
 private const val LOGIN_TITLE = "Sign In to account"
 private const val LOGIN_DESCRIPTION =
     "Enter your ID and select whether you want us to save your session"
+private const val TITLE_ERROR = "User not found"
+private const val DESCRIPTION_ERROR =
+    "The ID you entered does not exist. Please try again or register a new account."
+
 
 @Composable
 fun LoginScreen(
@@ -41,8 +47,20 @@ fun LoginScreen(
     onRegisterClicked: () -> Unit
 ) {
     when (viewModel.stateLogin.collectAsState().value) {
-        ScreenState.Error -> {}
-        ScreenState.Idle -> {}
+        ScreenState.Error -> ShieldResultScreen(
+            title = TITLE_ERROR,
+            description = DESCRIPTION_ERROR,
+            iconType = IconType.ERROR,
+        ) { viewModel.resetState() }
+        ScreenState.Idle -> {
+            val userId = viewModel.getUserIdSession()
+            if (!userId.isNullOrBlank()) {
+                onLoginClicked(userId)
+                viewModel.resetState()
+            } else {
+                LoginScreenContent(viewModel, onRegisterClicked)
+            }
+        }
         ScreenState.Loading -> ProgressBarView()
         ScreenState.Success -> {
             val userId = viewModel.id.collectAsState().value
@@ -50,8 +68,8 @@ fun LoginScreen(
             viewModel.resetState()
         }
     }
-    LoginScreenContent(viewModel, onRegisterClicked)
 }
+
 
 @Composable
 fun LoginScreenContent(
