@@ -44,7 +44,7 @@ fun ProfileScreen(
     val userId = viewModel.userId
 
     val state = viewModel.stateProfile.collectAsState()
-    when(state.value) {
+    when (state.value) {
         ScreenState.Error -> ShieldResultScreen(
             IconType.ERROR,
             TITLE_ERROR_GET_PROFILE,
@@ -70,7 +70,7 @@ fun ProfileScreenContent(
     ) {
         HeaderSection(userData.value?.name)
         ContentSection(userData.value)
-        ButtonLonOut(onLogoutClicked)
+        ButtonLonOut(viewModel, onLogoutClicked)
     }
 }
 
@@ -241,10 +241,16 @@ private fun DiverLine() {
 }
 
 @Composable
-private fun ButtonLonOut(onLogoutClicked: () -> Unit) {
+private fun ButtonLonOut(
+    viewModel: ProfileViewModel,
+    onLogoutClicked: () -> Unit
+) {
     ButtonPrimary(
         text = "Log out",
-        onClick = { onLogoutClicked() },
+        onClick = {
+            viewModel.deleteUserId()
+            onLogoutClicked()
+        },
         modifier = Modifier
             .padding(
                 top = 32.dp,

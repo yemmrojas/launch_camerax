@@ -3,6 +3,8 @@ package com.example.launchcamera.screen.login.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.launchcamera.domain.usescases.GetUserByIdUseCase
+import com.example.launchcamera.domain.usescases.GetUserIdUseCase
+import com.example.launchcamera.domain.usescases.SaveUserIdUsesCase
 import com.example.launchcamera.screen.state.ScreenState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +15,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val getUserByIdUseCase: GetUserByIdUseCase
+    private val getUserByIdUseCase: GetUserByIdUseCase,
+    private val saveUserIdUsesCase: SaveUserIdUsesCase,
+    private val getUserIdUseCase: GetUserIdUseCase
 ) : ViewModel() {
 
     private val _stateLogin = MutableStateFlow<ScreenState>(ScreenState.Idle)
@@ -56,6 +60,7 @@ class LoginViewModel @Inject constructor(
             val result = getUserByIdUseCase(id)
             if (result.isSuccess && result.getOrNull() != null) {
                 _stateLogin.value = ScreenState.Success
+                saveUserIdSession(id)
             } else {
                 _stateLogin.value = ScreenState.Error
             }
@@ -64,6 +69,22 @@ class LoginViewModel @Inject constructor(
 
     fun resetState() {
         _stateLogin.value = ScreenState.Idle
+    }
+
+    private fun saveUserIdSession(id: String) {
+        viewModelScope.launch {
+            if (_saveSession.value) {
+                saveUserIdUsesCase(id)
+            }
+        }
+    }
+
+    fun getUserIdSession(): String? {
+        var userId : String? = null
+        viewModelScope.launch {
+            userId = getUserIdUseCase()
+        }
+        return userId
     }
 
     companion object {
